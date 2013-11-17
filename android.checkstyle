@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module PUBLIC "-//Puppy Crawl//DTD Check Configuration 1.2//EN" "http://www.puppycrawl.com/dtds/configuration_1_2.dtd">
+
+<module name="Checker">
+  <module name="FileLength">
+    <property name="severity" value="warning" />
+  </module>
+  <module name="FileTabCharacter">
+    <property name="severity" value="info" />
+  </module>
+  <module name="NewlineAtEndOfFile">
+    <property name="severity" value="info" />
+  </module>
+  <module name="StrictDuplicateCode">
+    <property name="severity" value="error" />
+    <property name="min" value="20" />
+  </module>
+  <module name="Translation">
+    <property name="severity" value="info" />
+  </module>
+  <module name="SuppressionCommentFilter"/>
+  <module name="SuppressWithNearbyCommentFilter">
+    <property name="commentFormat" value="SUPPRESS CHECKSTYLE (\d+)\:(\w+)"/>
+    <property name="checkFormat" value="$2"/>
+    <property name="influenceFormat" value="$1"/>
+  </module>
+  <module name="TreeWalker">
+    <property name="tabWidth" value="1" />
+    <module name="FileContentsHolder" />
+    <module name="AvoidNestedBlocks">
+      <property name="severity" value="warning" />
+    </module>
+    <module name="BooleanExpressionComplexity">
+      <property name="severity" value="warning" />
+      <property name="max" value="4" />
+    </module>
+    <module name="ClassTypeParameterName">
+      <property name="severity" value="warning" />
+    </module>
+    <module name="ConstantName">
+      <property name="severity" value="info" />
+      <property name="applyToPrivate" value="false" />
+    </module>
+    <module name="CovariantEquals">
+      <property name="severity" value="error" />
+    </module>
+    <module name="DefaultComesLast">
+      <property name="severity" value="warning" />
+    </module>
+    <module name="EmptyBlock">
+      <property name="severity" value="warning" />
+      <property name="option" value="text" />
+    </module>
+    <module name="EmptyForIteratorPad">
+      <property name="severity" value="info" />
+    </module>
+    <module name="EmptyStatement">
+      <property name="severity" value="info" />
+    </module>
+    <module name="EqualsAvoidNull">
+      <property name="severity" value="error" />
+      <property name="ignoreEqualsIgnoreCase" value="false" />
+    </module>
+    <module name="EqualsHashCode">
+      <property name="severity" value="error" />
+    </module>
+    <module name="FallThrough">
+      <property name="severity" value="warning" />
+    </module>
+    <module name="GenericWhitespace">
+      <property name="severity" value="info" />
+    </module>
+    <module name="HiddenField">
+      <property name="severity" value="error" />
+      <property name="ignoreConstructorParameter" value="true" />
+      <property name="ignoreSetter" value="true" />
+    </module>
+    <module name="HideUtilityClassConstructor">
+      <property name="severity" value="warning" />
+    </module>
+    <module name="IllegalCatch">
+      <property name="severity" value="warning" />
+    </module>
+    <module name="IllegalImport">
+      <property name="severity" value="warning" />
+    </module>
+    <module name="IllegalInstantiation">
+      <property name="severity" value="warning" />
+    </module>
+    <module name="IllegalThrows">
+      <property name="severity" value="warning" />
+    </module>
+    <module name="InnerAssignment">
+      <property name="severity" value="warning" />
+    </module>
+    <module name="InterfaceIsType">
+      <property name="severity" value="warning" />
+    </module>
+    <module name="LeftCurly">
+      <property name="severity" value="warning" />
+    </module>
+    <module name="LineLength">
+      <property name="severity" value="warning" />
+      <property name="max" value="220" />
+    </module>
+    <module name="LocalFinalVariableName">
+      <property name="severity" value="warning" />
+    </module>
+    <module name="LocalVariableName">
+      <property name="severity" value="warning" />
+    </module>
+    <module name="MagicNumber">
+      <property name="severity" value="info" />
+      <property name="ignoreHashCodeMethod" value="true" />
+      <property name="ignoreAnnotation" value="false" />
+    </module>
+    <module name="MemberName">
+      <property name="severity" value="warning" />
+    </module>
+    <module name="MethodLength">
+      <property name="severity" value="warning" />
+      <property name="max" value="40" />
+    </module>
+    <module name="MethodName">
+      <property name="severity" value="warning" />
+    </module>
+    <module name="MethodParamPad">
+      <property name="severity" value="info" />
+    </module>
+    <module name="MethodTypeParameterName">
+      <property name="severity" value="warning" />
+    </module>
+    <module name="MissingDeprecated">
+      <property name="severity" value="warning" />
+    </module>
+    <module name="MissingOverride">
+      <property name="severity" value="warning" />
+      <property name="javaFiveCompatibility" value="false" />
+    </module>
+    <module name="MissingSwitchDefault">
+      <property name="severity" value="error" />
+    </module>
+    <module name="ModifiedControlVariable">
+      <property name="severity" value="error" />
+    </module>
+    <module name="ModifierOrder">
+      <property name="severity" value="info" />
+    </module>
+    <module name="MultipleVariableDeclarations">
+      <property name="severity" value="warning" />
+    </module>
+    <module name="NeedBraces">
+      <property name="severity" value="error" />
+    </module>
+    <module name="NestedForDepth">
+      <property name="severity" value="warning" />
+      <property name="max" value="3" />
+    </module>
+    <module name="NestedIfDepth">
+      <property name="severity" value="warning" />
+      <property name="max" value="4" />
+    </module>
+    <module name="NestedTryDepth">
+      <property name="severity" value="warning" />
+      <property name="max" value="3" />
+    </module>
+    <module name="NoClone">
+      <property name="severity" value="error" />
+    </module>
+    <module name="NoFinalizer">
+      <property name="severity" value="warning" />
+    </module>
+    <module name="NoWhitespaceAfter">
+      <property name="severity" value="info" />
+    </module>
+    <module name="NoWhitespaceBefore">
+      <property name="severity" value="info" />
+    </module>
+    <module name="OneStatementPerLine">
+      <property name="severity" value="info" />
+    </module>
+    <module name="OuterTypeFilename">
+      <property name="severity" value="info" />
+    </module>
+    <module name="PackageDeclaration">
+      <property name="severity" value="warning" />
+      <property name="ignoreDirectoryName" value="false" />
+    </module>
+    <module name="PackageName">
+      <property name="severity" value="warning" />
+    </module>
+    <module name="ParameterName">
+      <property name="severity" value="warning" />
+    </module>
+    <module name="ParenPad">
+      <property name="severity" value="info" />
+    </module>
+    <module name="RedundantImport">
+      <property name="severity" value="error" />
+    </module>
+    <module name="RedundantModifier">
+      <property name="severity" value="info" />
+    </module>
+    <module name="RedundantThrows">
+      <property name="severity" value="info" />
+      <property name="suppressLoadErrors" value="true" />
+    </module>
+    <module name="RightCurly">
+      <property name="severity" value="warning" />
+    </module>
+    <module name="SimplifyBooleanExpression">
+      <property name="severity" value="warning" />
+    </module>
+    <module name="SimplifyBooleanReturn">
+      <property name="severity" value="warning" />
+    </module>
+    <module name="StaticVariableName">
+      <property name="severity" value="warning" />
+    </module>
+    <module name="StringLiteralEquality">
+      <property name="severity" value="warning" />
+    </module>
+    <module name="TodoComment">
+      <property name="severity" value="info" />
+    </module>
+    <module name="TypeName">
+      <property name="severity" value="warning" />
+    </module>
+    <module name="TypecastParenPad">
+      <property name="severity" value="warning" />
+    </module>
+    <module name="UnnecessaryParentheses">
+      <property name="severity" value="info" />
+    </module>
+    <module name="UnusedImports">
+      <property name="severity" value="warning" />
+      <property name="processJavadoc" value="false" />
+    </module>
+    <module name="UpperEll">
+      <property name="severity" value="warning" />
+    </module>
+    <module name="VisibilityModifier">
+      <property name="severity" value="warning" />
+      <property name="packageAllowed" value="false" />
+      <property name="protectedAllowed" value="true" />
+    </module>
+    <module name="WhitespaceAfter">
+      <property name="severity" value="info" />
+    </module>
+    <module name="WhitespaceAround">
+      <property name="severity" value="info" />
+    </module>
+  </module>
+</module>
+
