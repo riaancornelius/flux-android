@@ -1,0 +1,14 @@
+<atlassian-ide-plugin>
+  <project-configuration id="1">
+    <servers id="2">
+      <jira id="3">
+        <server-id id="4">d86f2f03-2a3c-4cf5-a310-d4ccb354bc67</server-id>
+        <name>Flux</name>
+        <url>https://projectflux.atlassian.net</url>
+        <shared>false</shared>
+        <useSessionCookies>false</useSessionCookies>
+      </jira>
+    </servers>
+    <default-jira-server reference="4" />
+  </project-configuration>
+</atlassian-ide-plugin>

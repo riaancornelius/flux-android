@@ -9,11 +9,15 @@
 		<version>1.0-SNAPSHOT</version>
 	</parent>
 
-	<groupId>com.riaancornelius.flux</groupId>
 	<artifactId>flux</artifactId>
 	<version>1.0-SNAPSHOT</version>
 	<packaging>apk</packaging>
 	<name>Flux - Application</name>
+<!--
+    <properties>
+        <android.avd.name>Android4</android.avd.name>
+        <android.platform>16</android.platform>
+    </properties>-->
 
 	<dependencies>
         <!--main-->
@@ -31,14 +35,46 @@
             <version>2.2</version>
             <scope>test</scope>
         </dependency>
-
 		<dependency>
 			<groupId>com.google.android</groupId>
 			<artifactId>android</artifactId>
 			<version>${platform.version}</version>
 			<scope>provided</scope>
 		</dependency>
-	</dependencies>
+        <dependency>
+            <groupId>org.easytesting</groupId>
+            <artifactId>fest-assert</artifactId>
+        </dependency>
+        <!--  Barcode Scanning  -->
+        <dependency>
+            <groupId>com.google.zxing</groupId>
+            <artifactId>core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.google.zxing</groupId>
+            <artifactId>android-integration</artifactId>
+        </dependency>
+        <!--  Rest API  -->
+        <dependency>
+            <groupId>com.octo.android.robospice</groupId>
+            <artifactId>robospice-spring-android</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.jackson</groupId>
+            <artifactId>jackson-mapper-asl</artifactId>
+        </dependency>
+        <!-- Graphing -->
+        <!--<dependency>-->
+            <!--<groupId>com.androidplot</groupId>-->
+            <!--<artifactId>androidplot-core</artifactId>-->
+        <!--</dependency>-->
+        <dependency>
+            <groupId>org.roboguice</groupId>
+            <artifactId>roboguice</artifactId>
+        </dependency>
+
+    </dependencies>
+
 	<build>
 		<finalName>${project.artifactId}</finalName>
 		<plugins>
@@ -46,7 +82,56 @@
 				<groupId>com.jayway.maven.plugins.android.generation2</groupId>
 				<artifactId>android-maven-plugin</artifactId>
 				<extensions>true</extensions>
+                <configuration>
+                    <emulator>
+                        <!-- the name of the avd device to use for starting the emulator -->
+                        <avd>${android.avd.name}</avd>
+                        <options>-no-skin</options>
+                        <wait>90000</wait>
+                    </emulator>
+                    <sdk>
+                        <!-- platform or api level (api level 4 = platform 1.6) -->
+                        <platform>${android.platform}</platform>
+                    </sdk>
+                    <extractDuplicates>true</extractDuplicates>
+                    <undeployBeforeDeploy>true</undeployBeforeDeploy>
+                    <proguard>
+                        <skip>true</skip>
+                    </proguard>
+                    <sign>
+                        <debug>true</debug>
+                    </sign>
+                    <release>false</release>
+                    <manifest>
+                        <versionName>${project.version}</versionName>
+                    </manifest>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>startEmulator</id>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>emulator-start</goal>
+                        </goals>
+                    </execution>
+                </executions>
 			</plugin>
+
+            <plugin>
+                <artifactId>maven-install-plugin</artifactId>
+                <configuration>
+                    <skip>false</skip>
+                </configuration>
+            </plugin>
+
+            <!-- Disable default maven deploy plugin -->
+            <plugin>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
@@ -58,6 +143,61 @@
                     <argLine>-Xmx1024m</argLine>
                 </configuration>
             </plugin>
-		</plugins>
+
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <configuration>
+                    <includes>
+                        <include>com.riaancornelius.flux/*</include>
+                    </includes>
+                </configuration>
+            </plugin>
+
+        </plugins>
 	</build>
+
+    <profiles>
+        <profile>
+            <id>jacoco</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.jayway.maven.plugins.android.generation2</groupId>
+                        <artifactId>android-maven-plugin</artifactId>
+                        <configuration>
+                            <emma>
+                                <enable>true</enable>
+                                <classFolders>${project.basedir}/target/classes/</classFolders>
+                                <outputMetaFile>${project.basedir}/target/emma/coverage.em</outputMetaFile>
+                            </emma>
+                            <dex>
+                                <!-- Required for EMMA -->
+                                <noLocals>true</noLocals>
+                            </dex>
+                            <test>
+                                <coverage>true</coverage>
+                                <createReport>true</createReport>
+                            </test>
+                        </configuration>
+                        <!--<executions>-->
+                            <!--<execution>-->
+                                <!--<id>pull-coverage</id>-->
+                                <!--<phase>post-integration-test</phase>-->
+                                <!--<goals>-->
+                                    <!--<goal>pull</goal>-->
+                                <!--</goals>-->
+                                <!--<configuration>-->
+                                    <!--<pullSource>/data/data/com.riaancornelius.flux/files/coverage.ec</pullSource>-->
+                                    <!--<pullDestination>${project.basedir}/../flux/target/jacoco-it.exec</pullDestination>-->
+                                <!--</configuration>-->
+                            <!--</execution>-->
+                        <!--</executions>-->
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+
 </project>

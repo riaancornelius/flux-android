@@ -6,10 +6,74 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin" >
 
-    <TextView
-        android:id="@+id/hello_world_tv"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+            android:id="@+id/sprint_details"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true" >
+        <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20dip"
+                android:text="..."
+                android:id="@+id/sprintName"
+                android:background="@android:color/transparent"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentTop="true"
+                android:onClick="onViewSprintsClick" />
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14dip"
+                android:text="..."
+                android:id="@+id/sprintDates"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@id/sprintName" />
+
+        <LinearLayout
+                style="@style/AppTheme"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@id/sprintDates" >
+            <Button
+                    android:id="@+id/totalIssues"
+                    android:text="..."
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            <Button
+                    android:id="@+id/completedIssues"
+                    android:text="..."
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            <Button
+                    android:id="@+id/uncompletedIssues"
+                    android:text="..."
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <ImageView
+        android:src="@drawable/burndown"
+        android:contentDescription="Burndown"
+        android:layout_margin="20dp"
         android:layout_height="wrap_content"
-        android:text="@string/hello_world" />
+        android:layout_width="wrap_content"/>
+
+    <Button
+        android:id="@+id/scan_ticket"
+        android:text="@string/scan_a_ticket"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:onClick="onScanTicketClick"/>
+
+    <TextView
+        android:id="@+id/scanResult"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/scan_ticket"/>
 
 </RelativeLayout>

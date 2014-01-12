@@ -7,7 +7,7 @@
     <artifactId>flux-parent</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>flux - Parent</name>
+    <name>Flux</name>
 
     <modules>
         <module>flux</module>
@@ -15,10 +15,18 @@
     </modules>
 
     <properties>
-        <android.platform>16</android.platform>
+        <android.platform>17</android.platform>
         <platform.version>4.1.1.4</platform.version>
+
+        <!-- Rest API -->
+        <robospice.spring.android.version>1.4.9</robospice.spring.android.version>
+        <spring.android.jackson.version>1.9.11</spring.android.jackson.version>
+        <androidplot-core.version>0.5.2-SNAPSHOT</androidplot-core.version>
+
         <android.plugin.version>3.6.0</android.plugin.version>
         <maven-resources-plugin.version>2.4.3</maven-resources-plugin.version>
+        <emma.version>2.1.5320</emma.version>
+        <roboguice.version>2.0</roboguice.version>
 
         <android.avd.name>Gingerbread</android.avd.name>
         <nonReleaseBuild>true</nonReleaseBuild>
@@ -38,11 +46,55 @@
                 <version>${platform.version}</version>
                 <scope>provided</scope>
             </dependency>
+            <!--  Barcode Scanning-->
+            <dependency>
+                <groupId>com.google.zxing</groupId>
+                <artifactId>core</artifactId>
+                <version>2.3.0</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.zxing</groupId>
+                <artifactId>android-integration</artifactId>
+                <version>2.3.0</version>
+            </dependency>
+            <!-- Rest API -->
+            <dependency>
+                <groupId>com.octo.android.robospice</groupId>
+                <artifactId>robospice-spring-android</artifactId>
+                <version>${robospice.spring.android.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.codehaus.jackson</groupId>
+                <artifactId>jackson-mapper-asl</artifactId>
+                <version>${spring.android.jackson.version}</version>
+            </dependency>
+            <!-- Graphing -->
+            <!--<dependency>-->
+                <!--<groupId>com.androidplot</groupId>-->
+                <!--<artifactId>androidplot-core</artifactId>-->
+                <!--<version>${androidplot-core.version}</version>-->
+            <!--</dependency>-->
+            <!-- Testing -->
             <dependency>
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
                 <version>4.11</version>
                 <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.easytesting</groupId>
+                <artifactId>fest-assert</artifactId>
+                <version>1.4</version>
+            </dependency>
+            <dependency>
+                <groupId>org.roboguice</groupId>
+                <artifactId>roboguice</artifactId>
+                <version>${roboguice.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>emma</groupId>
+                <artifactId>emma</artifactId>
+                <version>${emma.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -61,11 +113,10 @@
                             <platform>${android.platform}</platform>
                         </sdk>
                         <emulator>
-                            <!-- the name of the avd device to use for starting the emulator -->
                             <avd>${android.avd.name}</avd>
-                            <wait>50000</wait>
+                            <wait>90000</wait>
                         </emulator>
-                        <deleteConflictingFiles>true</deleteConflictingFiles>
+                        <!--<deleteConflictingFiles>true</deleteConflictingFiles>-->
                         <extractDuplicates>true</extractDuplicates>
                         <undeployBeforeDeploy>true</undeployBeforeDeploy>
                         <sign>
@@ -153,7 +204,36 @@
                         </execution>
                     </executions>
                 </plugin>
+
+                <plugin>
+                    <groupId>org.jacoco</groupId>
+                    <artifactId>jacoco-maven-plugin</artifactId>
+                    <version>0.6.3.201306030806</version>
+                    <executions>
+                        <execution>
+                            <phase>initialize</phase>
+                            <goals>
+                                <goal>prepare-agent</goal>
+                            </goals>
+                            <configuration>
+                                <destFile>${basedir}/target/coverage-reports/jacoco-unit.exec</destFile>
+                            </configuration>
+                        </execution>
+                        <execution>
+                            <id>report</id>
+                            <phase>prepare-package</phase>
+                            <goals>
+                                <goal>report</goal>
+                            </goals>
+                            <configuration>
+                                <dataFile>${basedir}/target/coverage-reports/jacoco-unit.exec</dataFile>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+
             </plugins>
         </pluginManagement>
     </build>
+
 </project>
