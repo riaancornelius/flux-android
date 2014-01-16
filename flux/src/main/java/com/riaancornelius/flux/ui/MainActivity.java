@@ -19,6 +19,7 @@ import com.riaancornelius.flux.jira.api.request.sprint.SprintReportRequest;
 import com.riaancornelius.flux.jira.domain.sprint.Sprint;
 import com.riaancornelius.flux.jira.domain.sprint.report.SprintReport;
 import com.riaancornelius.flux.ui.components.EncryptedEditText;
+import com.riaancornelius.flux.ui.issue.IssueActivity;
 import com.riaancornelius.flux.ui.sprint.SprintsActivity;
 import com.riaancornelius.flux.util.DateUtil;
 
@@ -113,6 +114,13 @@ public class MainActivity extends BaseActivity {
 
     public void onScanTicketClick(View view) {
         super.scanTicketCode();
+    }
+
+    public void onArViewClick(View view) {
+        // TODO: ONLY FOR TESTING
+        Intent myIntent = new Intent(this, IssueActivity.class);
+        myIntent.putExtra("issueKey", "FLUX-44");
+        this.startActivity(myIntent);
     }
 
     public void onViewSprintsClick(View view) {

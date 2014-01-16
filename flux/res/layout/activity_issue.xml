@@ -2,46 +2,52 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
+                android:layout_marginLeft="20dip"
+                android:layout_marginRight="20dip"
                 android:orientation="vertical">
 
     <LinearLayout
+            style="?android:buttonBarStyle"
             android:layout_alignParentTop="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/issue_header"
-            android:layout_centerInParent="true">
+            android:layout_centerVertical="true"
+            android:padding="8dip"
+            android:id="@+id/issue_header" >
 
         <ImageButton
                 android:id="@+id/issue_status"
                 android:contentDescription="@string/issue_status"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
-        <TextView
+                style="?android:borderlessButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="20dip"
+                android:padding="8dip"/>
+
+        <TextView
                 android:text="@string/loading"
                 android:id="@+id/issue_key"
+                android:textAppearance="?android:textAppearanceLarge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="8dip"
                 android:onClick="onViewSprintsClick"/>
     </LinearLayout>
 
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="16dip"
+            android:textAppearance="?android:textAppearanceMedium"
             android:text="@string/loading"
             android:id="@+id/issue_summary"
-            android:layout_centerHorizontal="true"
             android:layout_below="@id/issue_header"/>
 
     <TextView
+            android:id="@+id/issue_assigned_to"
+            android:text="@string/assigned_to"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="12dip"
-            android:text="@string/assigned_to"
-            android:id="@+id/issue_assigned_to"
-            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="10dip"
+            android:textAppearance="?android:textAppearanceSmall"
             android:layout_below="@id/issue_summary"/>
 
     <ScrollView
@@ -53,16 +59,24 @@
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="12dip"
+                android:textAppearance="?android:textAppearanceSmall"
                 android:text="@string/loading"
                 android:id="@+id/issue_description"/>
     </ScrollView>
 
-    <ListView xmlns:android="http://schemas.android.com/apk/res/android"
-              android:id="@+id/issue_comments_list"
+    <ListView android:id="@+id/issue_comments_list"
               android:layout_width="fill_parent"
               android:layout_height="fill_parent"
               android:layout_below="@id/issue_description_container" />
+
+    <TextView android:id="@+id/issue_comments_list_header"
+              android:text="@string/comments"
+              android:textAppearance="?android:textAppearanceMedium"
+              style="?android:listSeparatorTextViewStyle"
+              android:layout_width="fill_parent"
+              android:layout_height="wrap_content"
+              android:padding="8dip"
+              android:layout_above="@id/issue_comments_list" />
 
 </RelativeLayout>
 

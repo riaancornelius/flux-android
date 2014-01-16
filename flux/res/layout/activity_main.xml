@@ -14,7 +14,7 @@
         <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="20dip"
+                android:textAppearance="?android:textAppearanceLarge"
                 android:text="..."
                 android:id="@+id/sprintName"
                 android:background="@android:color/transparent"
@@ -25,31 +25,37 @@
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="14dip"
+                android:textAppearance="?android:textAppearanceSmall"
                 android:text="..."
                 android:id="@+id/sprintDates"
                 android:layout_centerHorizontal="true"
                 android:layout_below="@id/sprintName" />
 
         <LinearLayout
-                style="@style/AppTheme"
+                style="?android:buttonBarStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_below="@id/sprintDates" >
             <Button
+                    style="?android:buttonBarButtonStyle"
                     android:id="@+id/totalIssues"
                     android:text="..."
+                    android:textAppearance="?android:textAppearanceButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
             <Button
+                    style="?android:buttonBarButtonStyle"
                     android:id="@+id/completedIssues"
                     android:text="..."
+                    android:textAppearance="?android:textAppearanceButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
             <Button
+                    style="?android:buttonBarButtonStyle"
                     android:id="@+id/uncompletedIssues"
                     android:text="..."
+                    android:textAppearance="?android:textAppearanceButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
         </LinearLayout>
@@ -58,22 +64,35 @@
     <ImageView
         android:src="@drawable/burndown"
         android:contentDescription="Burndown"
-        android:layout_margin="20dp"
+        android:layout_margin="10dp"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"/>
 
-    <Button
-        android:id="@+id/scan_ticket"
-        android:text="@string/scan_a_ticket"
-        android:layout_width="match_parent"
+    <LinearLayout
+        style="?android:buttonBarStyle"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
-        android:onClick="onScanTicketClick"/>
+        android:layout_margin="10dp">
 
-    <TextView
-        android:id="@+id/scanResult"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/scan_ticket"/>
+        <Button
+            style="?android:buttonBarButtonStyle"
+            android:id="@+id/scan_ticket"
+            android:text="@string/scan_a_ticket"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:textAppearanceButton"
+            android:onClick="onScanTicketClick"/>
+
+        <Button
+            style="?android:buttonBarButtonStyle"
+            android:id="@+id/ar_view_button"
+            android:text="@string/augmented_view"
+            android:textAppearance="?android:textAppearanceButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onArViewClick"/>
+    </LinearLayout>
 
 </RelativeLayout>

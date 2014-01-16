@@ -17,5 +17,7 @@
     <string name="show_text">Show Password While Typing</string>
     <string name="prompt_password">Password:</string>
     <string name="prompt_username">Username:</string>
+    <string name="augmented_view">Augmented View</string>
+    <string name="comments">Comments</string>
 
 </resources>
