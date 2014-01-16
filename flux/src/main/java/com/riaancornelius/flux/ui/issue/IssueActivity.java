@@ -28,7 +28,7 @@ public class IssueActivity extends BaseActivity {
     private TextView descriptionField;
     @InjectView(R.id.issue_comments_list) private ListView commentsList;
 
-    private ArrayAdapter<String> commentsAdapter;
+    private CommentAdapter commentsAdapter;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,10 +48,6 @@ public class IssueActivity extends BaseActivity {
         summaryField = (TextView) findViewById(R.id.issue_summary);
         assignedToField = (TextView) findViewById(R.id.issue_assigned_to);
         descriptionField = (TextView) findViewById(R.id.issue_description);
-
-        commentsAdapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1, android.R.id.text1);
-        commentsList.setAdapter(commentsAdapter);
 
         performRequest(issueKey);
     }
@@ -118,12 +114,8 @@ public class IssueActivity extends BaseActivity {
                 return;
             }
 
-            commentsAdapter.clear();
-
-            for (Comment comment : issue.getFields().getCommentList().getComments()) {
-                commentsAdapter.add(comment.getBody());
-            }
-
+            commentsAdapter = new CommentAdapter(IssueActivity.this, issue.getFields().getCommentList());
+            commentsList.setAdapter(commentsAdapter);
             commentsAdapter.notifyDataSetChanged();
 
             IssueActivity.this.afterRequest();

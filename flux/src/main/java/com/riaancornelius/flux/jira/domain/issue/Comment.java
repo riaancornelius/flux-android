@@ -90,4 +90,18 @@ public class Comment {
     public void setUpdateAuthor(Author updateAuthor) {
         this.updateAuthor = updateAuthor;
     }
+
+    @Override
+    public String toString() {
+        return "Comment{" +
+                "id=" + id +
+                ", key='" + key + '\'' +
+                ", restUrl='" + restUrl + '\'' +
+                ", body='" + body + '\'' +
+                ", created=" + created +
+                ", updated=" + updated +
+                ", author=" + author +
+                ", updateAuthor=" + updateAuthor +
+                '}';
+    }
 }
