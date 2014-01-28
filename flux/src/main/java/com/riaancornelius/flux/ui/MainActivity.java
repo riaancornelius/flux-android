@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Environment;
+import android.preference.PreferenceManager;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -18,10 +20,10 @@ import com.riaancornelius.flux.domain.Settings;
 import com.riaancornelius.flux.jira.api.request.sprint.SprintReportRequest;
 import com.riaancornelius.flux.jira.domain.sprint.Sprint;
 import com.riaancornelius.flux.jira.domain.sprint.report.SprintReport;
-import com.riaancornelius.flux.ui.components.EncryptedEditText;
 import com.riaancornelius.flux.ui.issue.IssueActivity;
 import com.riaancornelius.flux.ui.sprint.SprintsActivity;
 import com.riaancornelius.flux.util.DateUtil;
+import roboguice.inject.InjectView;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -34,11 +36,12 @@ import java.util.Properties;
 public class MainActivity extends BaseActivity {
 
     private String lastRequestCacheKey;
-    private TextView sprintName;
-    private TextView sprintDates;
-    private Button sprintSummaryTotal;
-    private Button sprintSummaryCompleted;
-    private Button sprintSummaryUncompleted;
+
+    @InjectView(R.id.sprintName) private TextView sprintName;
+    @InjectView(R.id.sprintDates) private TextView sprintDates;
+    @InjectView(R.id.totalIssues) private Button sprintSummaryTotal;
+    @InjectView(R.id.completedIssues) private Button sprintSummaryCompleted;
+    @InjectView(R.id.uncompletedIssues) private Button sprintSummaryUncompleted;
 
     private long boardId;
     private long currentSprint;
@@ -67,14 +70,11 @@ public class MainActivity extends BaseActivity {
             super.loadSettingsActivity();
             finish();
         }
+    }
 
-        sprintName = (TextView) findViewById(R.id.sprintName);
-        sprintDates = (TextView) findViewById(R.id.sprintDates);
-
-        sprintSummaryTotal = (Button) findViewById(R.id.totalIssues);
-        sprintSummaryCompleted = (Button) findViewById(R.id.completedIssues);
-        sprintSummaryUncompleted = (Button) findViewById(R.id.uncompletedIssues);
-
+    @Override
+    protected void onStart() {
+        super.onStart();
         performSprintReportRequest();
     }
 
@@ -92,11 +92,11 @@ public class MainActivity extends BaseActivity {
             props.load(new FileInputStream(file));
             // Save the properties to the shared preferences where the app expects them
             Log.d("TEST", "File Loaded: "+file.getAbsolutePath());
-            SharedPreferences settings = getSharedPreferences(Settings.JIRA_SHARED_PREFERENCES_KEY, 0);
+//            SharedPreferences settings = getSharedPreferences(Settings.JIRA_SHARED_PREFERENCES_KEY, 0);
+            SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
             SharedPreferences.Editor editor = settings.edit();
             editor.putString(Settings.JIRA_USERNAME_KEY, props.getProperty("username"));
-            editor.putString(Settings.JIRA_PASSWORD_KEY,
-                    EncryptedEditText.rot13Encode(props.getProperty("password")).toString());
+            editor.putString(Settings.JIRA_PASSWORD_KEY, props.getProperty("password"));
             editor.putString(Settings.JIRA_BASE_URL_KEY, props.getProperty("baseUrl"));
             editor.commit();
             Log.d("TEST", "Settings saved");
@@ -129,7 +129,6 @@ public class MainActivity extends BaseActivity {
         MainActivity.this.startActivity(myIntent);
     }
 
-    /*
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         if (!TextUtils.isEmpty(lastRequestCacheKey)) {
@@ -144,14 +143,13 @@ public class MainActivity extends BaseActivity {
         if (savedInstanceState.containsKey(KEY_LAST_REQUEST_CACHE_KEY)) {
             lastRequestCacheKey = savedInstanceState
                     .getString(KEY_LAST_REQUEST_CACHE_KEY);
-            spiceManager.addListenerIfPending(Sprints.class,
-                    lastRequestCacheKey, new SprintsRequestListener());
-            spiceManager.getFromCache(Sprints.class,
+            spiceManager.addListenerIfPending(SprintReport.class,
+                    lastRequestCacheKey, new SprintReportRequestListener());
+            spiceManager.getFromCache(SprintReport.class,
                     lastRequestCacheKey, DurationInMillis.ONE_MINUTE,
-                    new SprintsRequestListener());
+                    new SprintReportRequestListener());
         }
     }
-    */
 
     //inner class of your spiced Activity
     private class SprintReportRequestListener implements RequestListener<SprintReport> {

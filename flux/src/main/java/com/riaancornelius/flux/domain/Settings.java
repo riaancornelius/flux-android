@@ -5,8 +5,7 @@ package com.riaancornelius.flux.domain;
  */
 public class Settings {
 
-    public static final String JIRA_SHARED_PREFERENCES_KEY = "com.riaancornelius.flux.jira.preferences";
-    public static final String JIRA_USERNAME_KEY = "username";
-    public static final String JIRA_PASSWORD_KEY = "password";
-    public static final String JIRA_BASE_URL_KEY = "baseUrl";
+    public static final String JIRA_USERNAME_KEY = "pref_key_username";
+    public static final String JIRA_PASSWORD_KEY = "pref_key_password";
+    public static final String JIRA_BASE_URL_KEY = "pref_key_baseUrl";
 }

@@ -15,6 +15,7 @@ import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 import com.riaancornelius.flux.BaseActivity;
 import com.riaancornelius.flux.R;
+import com.riaancornelius.flux.api.SpiceCallback;
 import com.riaancornelius.flux.jira.api.request.sprint.SprintsRequest;
 import com.riaancornelius.flux.jira.domain.sprint.Sprint;
 import com.riaancornelius.flux.jira.domain.sprint.Sprints;
@@ -22,7 +23,7 @@ import com.riaancornelius.flux.jira.domain.sprint.Sprints;
 /**
  * User: riaan.cornelius
  */
-public class SprintsActivity extends BaseActivity {
+public class SprintsActivity extends BaseActivity implements SpiceCallback {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,6 +87,11 @@ public class SprintsActivity extends BaseActivity {
                     lastRequestCacheKey, DurationInMillis.ONE_MINUTE,
                     new ListSprintsRequestListener());
         }
+    }
+
+    @Override
+    public void onRequestFinished() {
+        //To change body of implemented methods use File | Settings | File Templates.
     }
 
     private class ListSprintsRequestListener implements

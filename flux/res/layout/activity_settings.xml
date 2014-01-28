@@ -19,6 +19,7 @@
                     android:layout_marginRight="10dp"
                     android:text="@string/prompt_username"/>
             <EditText
+                    style="?android:text"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/username_entry_field"

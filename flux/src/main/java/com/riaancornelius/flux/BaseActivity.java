@@ -1,16 +1,15 @@
 package com.riaancornelius.flux;
 
 import android.annotation.TargetApi;
-import android.app.ProgressDialog;
+import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
-import android.view.Gravity;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.Window;
+import android.preference.PreferenceManager;
+import android.util.Log;
+import android.view.*;
 import android.widget.Toast;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
@@ -21,6 +20,8 @@ import com.riaancornelius.flux.ui.MainActivity;
 import com.riaancornelius.flux.ui.issue.IssueActivity;
 import com.riaancornelius.flux.ui.settings.SettingsActivity;
 import roboguice.activity.RoboActivity;
+
+import java.lang.reflect.Field;
 
 /**
  * Created by riaan.cornelius on 2013/12/22.
@@ -36,8 +37,6 @@ public class BaseActivity extends RoboActivity {
 
     protected String lastRequestCacheKey;
 
-    protected ProgressDialog progressDialog;
-
     /**
      * Called when the activity is first created.
      * @param savedInstanceState If the activity is being re-initialized after
@@ -47,18 +46,35 @@ public class BaseActivity extends RoboActivity {
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        Log.i("BaseActivity", "onCreate");
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-//        ActionBar actionBar = getActionBar();
-//        actionBar.setSubtitle("Pre-Alpha test version");
-//        actionBar.setTitle("Project Flux");
+        if (savedInstanceState != null) {
+            //@TODO
+        }
+        ActionBar actionBar = getActionBar();
+        actionBar.setSubtitle("Pre-Alpha test version");
+        actionBar.setTitle("Project Flux");
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        try {
+            ViewConfiguration config = ViewConfiguration.get(this);
+            Field menuKeyField = ViewConfiguration.class.getDeclaredField("sHasPermanentMenuKey");
+            if(menuKeyField!=null){
+                menuKeyField.setAccessible(true);
+                menuKeyField.setBoolean(config, false);
+            }
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
-        return true;
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -95,25 +111,39 @@ public class BaseActivity extends RoboActivity {
     }
 
     @Override
+    protected void onSaveInstanceState(Bundle saveState) {
+        Log.i("BaseActivity", "onSaveInstanceState");
+        super.onSaveInstanceState(saveState);
+    }
+
+    @Override
     protected void onStart() {
+        Log.i("BaseActivity", "onStart");
         spiceManager.start(this);
         super.onStart();
     }
 
     @Override
     protected void onStop() {
+        Log.i("BaseActivity", "onStop");
         spiceManager.shouldStop();
         super.onStop();
     }
 
+    @Override
+    protected void onDestroy() {
+        Log.i("BaseActivity", "onDestroy");
+        super.onDestroy();
+    }
+
     protected void beforeRequest() {
+        Log.i("BaseActivity", "beforeRequest");
         this.setProgressBarIndeterminateVisibility(true);
-        progressDialog = ProgressDialog.show(this, "Loading data", "Please wait");
     }
 
     protected void afterRequest() {
+        Log.i("BaseActivity", "afterRequest");
         this.setProgressBarIndeterminateVisibility(false);
-        progressDialog.dismiss();
     }
 
     protected void loadMainActivity() {
@@ -128,7 +158,7 @@ public class BaseActivity extends RoboActivity {
     }
 
     protected SharedPreferences getJiraSharedPreferences() {
-        return getSharedPreferences(Settings.JIRA_SHARED_PREFERENCES_KEY, 0);
+        return PreferenceManager.getDefaultSharedPreferences(this);
     }
 
     protected boolean isUserDetailsSet() {

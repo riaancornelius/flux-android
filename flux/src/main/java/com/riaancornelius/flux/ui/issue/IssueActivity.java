@@ -4,16 +4,16 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.*;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 import com.octo.android.robospice.persistence.DurationInMillis;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 import com.riaancornelius.flux.BaseActivity;
 import com.riaancornelius.flux.R;
 import com.riaancornelius.flux.jira.api.request.issue.IssueRequest;
-import com.riaancornelius.flux.jira.domain.issue.Comment;
 import com.riaancornelius.flux.jira.domain.issue.Issue;
-import com.riaancornelius.flux.jira.domain.sprint.Sprint;
 import roboguice.inject.InjectView;
 
 /**
@@ -41,6 +41,12 @@ public class IssueActivity extends BaseActivity {
         initUIComponents();
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        performRequest(issueKey);
+    }
+
     private String lastRequestCacheKey;
 
     private void initUIComponents() {
@@ -48,8 +54,6 @@ public class IssueActivity extends BaseActivity {
         summaryField = (TextView) findViewById(R.id.issue_summary);
         assignedToField = (TextView) findViewById(R.id.issue_assigned_to);
         descriptionField = (TextView) findViewById(R.id.issue_description);
-
-        performRequest(issueKey);
     }
 
     private void performRequest(String IssueKey) {
@@ -58,7 +62,9 @@ public class IssueActivity extends BaseActivity {
         IssueRequest request = new IssueRequest(IssueKey);
         lastRequestCacheKey = request.createCacheKey();
         spiceManager.execute(request, lastRequestCacheKey,
-                DurationInMillis.ONE_MINUTE, new IssueRequestListener());
+                DurationInMillis.NEVER, // ONLY FOR TESTING
+                //DurationInMillis.ONE_MINUTE,
+                new IssueRequestListener());
     }
 
     @Override

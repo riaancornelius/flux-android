@@ -1,10 +1,10 @@
 package com.riaancornelius.flux.api;
 
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import com.riaancornelius.flux.domain.Settings;
 import com.riaancornelius.flux.jira.api.service.JiraJacksonSpringAndroidSpiceService;
-import com.riaancornelius.flux.ui.components.EncryptedEditText;
 import org.springframework.http.HttpAuthentication;
 import org.springframework.http.HttpBasicAuthentication;
 
@@ -18,7 +18,7 @@ public class JiraSpiceService extends JiraJacksonSpringAndroidSpiceService {
     @Override
     public void onCreate() {
         super.onCreate();
-        settings = getSharedPreferences(Settings.JIRA_SHARED_PREFERENCES_KEY, 0);
+        settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
     }
 
     @Override
@@ -26,12 +26,12 @@ public class JiraSpiceService extends JiraJacksonSpringAndroidSpiceService {
         if (settings != null) {
             String username = settings.getString(Settings.JIRA_USERNAME_KEY, "");
             Log.d("SETTINGS", "Loaded username: " + username);
-            String encodedPassword = settings.getString(Settings.JIRA_PASSWORD_KEY, "");
-            Log.d("SETTINGS", "Loaded password: " + EncryptedEditText.rot13Decode(encodedPassword).toString());
-            if (username != null && encodedPassword != null){
+            String password = settings.getString(Settings.JIRA_PASSWORD_KEY, "");
+            Log.d("SETTINGS", "Loaded password: " + password);
+            if (username != null && password != null){
                 return new HttpBasicAuthentication(
                         username,
-                        EncryptedEditText.rot13Decode(encodedPassword).toString());
+                        password);
             }
         }
         return null;
@@ -45,6 +45,5 @@ public class JiraSpiceService extends JiraJacksonSpringAndroidSpiceService {
         }
         Log.d("SETTINGS", "Settings was null");
         return null;
-        //return "https://projectflux.atlassian.net/";
     }
 }

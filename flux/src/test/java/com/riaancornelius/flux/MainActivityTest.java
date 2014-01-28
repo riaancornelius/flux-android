@@ -5,6 +5,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.widget.Button;
 
 import com.riaancornelius.flux.domain.Settings;
@@ -43,8 +44,8 @@ public class MainActivityTest {
 
     @Test
     public void withUserDetailsDoesntLaunchSettings() throws Exception {
-        SharedPreferences sharedPreferences = Robolectric.application.getSharedPreferences(
-                Settings.JIRA_SHARED_PREFERENCES_KEY, Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(
+                Robolectric.application);
         sharedPreferences.edit().putString(Settings.JIRA_USERNAME_KEY, "testUser").commit();
         sharedPreferences.edit().putString(Settings.JIRA_PASSWORD_KEY, "testPass").commit();
 

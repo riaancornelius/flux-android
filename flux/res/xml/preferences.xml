@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="fill_parent"
+    android:layout_width="fill_parent" >
+
+    <PreferenceCategory
+        android:title="@string/pref_jira_category"
+        android:key="pref_key_jira_settings">
+
+        <EditTextPreference
+            android:key="pref_key_baseUrl"
+            android:title="@string/pref_base_url"
+            android:summary="@string/pref_base_url_summary"
+            android:defaultValue="" />
+
+        <EditTextPreference
+            android:key="pref_key_username"
+            android:title="@string/pref_username"
+            android:summary="@string/pref_username_summary"
+            android:defaultValue="" />
+
+        <EditTextPreference
+            android:key="pref_key_password"
+            android:title="@string/pref_password"
+            android:summary="@string/pref_password_summary"
+            android:inputType="textPassword"
+            android:defaultValue="" />
+    </PreferenceCategory>
+
+</PreferenceScreen>
