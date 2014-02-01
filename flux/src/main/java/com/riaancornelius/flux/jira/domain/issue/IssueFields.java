@@ -38,6 +38,9 @@ public class IssueFields {
     @JsonProperty(value = "comment")
     private Comments commentList;
 
+    @JsonProperty(value = "attachment")
+    private ArrayList<Attachment> attachmentList;
+
     public String getSummary() {
         return summary;
     }
@@ -132,5 +135,13 @@ public class IssueFields {
 
     public void setCommentList(Comments commentList) {
         this.commentList = commentList;
+    }
+
+    public ArrayList<Attachment> getAttachmentList() {
+        return attachmentList;
+    }
+
+    public void setAttachmentList(ArrayList<Attachment> attachmentList) {
+        this.attachmentList = attachmentList;
     }
 }

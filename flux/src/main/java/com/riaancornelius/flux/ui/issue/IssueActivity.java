@@ -115,7 +115,6 @@ public class IssueActivity extends BaseActivity {
                 IssueCommentsFragment commentsFragment = new IssueCommentsFragment();
                 commentsFragment.setComments(issue.getFields().getCommentList());
                 pagerAdapter.addFragment(commentsFragment);
-                pagerAdapter.notifyDataSetChanged();
             }
 
             IssueActivity.this.afterRequest();

@@ -22,6 +22,7 @@ public class CustomPagerAdapter extends FragmentPagerAdapter{
 
     public void addFragment(Fragment f) {
         fragments.add(f);
+        super.notifyDataSetChanged();
     }
 
     @Override
