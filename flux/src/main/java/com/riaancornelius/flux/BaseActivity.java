@@ -21,11 +21,12 @@ import com.riaancornelius.flux.ui.MainActivity;
 import com.riaancornelius.flux.ui.issue.IssueActivity;
 import com.riaancornelius.flux.ui.settings.SettingsActivity;
 import roboguice.activity.RoboActivity;
+import roboguice.activity.RoboFragmentActivity;
 
 /**
  * Created by riaan.cornelius on 2013/12/22.
  */
-public class BaseActivity extends RoboActivity {
+public class BaseActivity extends RoboFragmentActivity {
 
     protected static final String KEY_LAST_REQUEST_CACHE_KEY = "lastRequestCacheKey";
 

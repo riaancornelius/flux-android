@@ -23,7 +23,9 @@
         <spring.android.jackson.version>1.9.11</spring.android.jackson.version>
         <androidplot-core.version>0.5.2-SNAPSHOT</androidplot-core.version>
 
-        <android.plugin.version>3.6.0</android.plugin.version>
+        <android.support.version>r7</android.support.version>
+
+        <android.plugin.version>3.8.0</android.plugin.version>
         <maven-resources-plugin.version>2.4.3</maven-resources-plugin.version>
         <emma.version>2.1.5320</emma.version>
         <roboguice.version>2.0</roboguice.version>
@@ -45,6 +47,11 @@
                 <artifactId>android-test</artifactId>
                 <version>${platform.version}</version>
                 <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.google.android</groupId>
+                <artifactId>support-v4</artifactId>
+                <version>${android.support.version}</version>
             </dependency>
             <!--  Barcode Scanning-->
             <dependency>
@@ -70,9 +77,9 @@
             </dependency>
             <!-- Graphing -->
             <!--<dependency>-->
-                <!--<groupId>com.androidplot</groupId>-->
-                <!--<artifactId>androidplot-core</artifactId>-->
-                <!--<version>${androidplot-core.version}</version>-->
+            <!--<groupId>com.androidplot</groupId>-->
+            <!--<artifactId>androidplot-core</artifactId>-->
+            <!--<version>${androidplot-core.version}</version>-->
             <!--</dependency>-->
             <!-- Testing -->
             <dependency>
@@ -216,7 +223,8 @@
                                 <goal>prepare-agent</goal>
                             </goals>
                             <configuration>
-                                <destFile>${basedir}/target/coverage-reports/jacoco-unit.exec</destFile>
+                                <destFile>${basedir}/target/coverage-reports/jacoco-unit.exec
+                                </destFile>
                             </configuration>
                         </execution>
                         <execution>
@@ -226,7 +234,8 @@
                                 <goal>report</goal>
                             </goals>
                             <configuration>
-                                <dataFile>${basedir}/target/coverage-reports/jacoco-unit.exec</dataFile>
+                                <dataFile>${basedir}/target/coverage-reports/jacoco-unit.exec
+                                </dataFile>
                             </configuration>
                         </execution>
                     </executions>
