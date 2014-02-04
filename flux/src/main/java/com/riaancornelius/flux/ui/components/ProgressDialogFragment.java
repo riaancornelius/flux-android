@@ -11,16 +11,32 @@ import android.view.KeyEvent;
  * @author Elsabe
  */
 public class ProgressDialogFragment extends DialogFragment {
-    private String title;
-    private String message;
+    private String title = "";
+    private String message = "";
 
-    private ProgressDialogFragment(String t, String m) {
-        title = t;
-        message = m;
+    protected String getTitle() {
+        return title;
+    }
+
+    protected void setTitle(String title) {
+        this.title = title;
+    }
+
+    protected String getMessage() {
+        return message;
+    }
+
+    protected void setMessage(String message) {
+        this.message = message;
     }
 
     public static ProgressDialogFragment newInstance(String title, String message) {
-        return new ProgressDialogFragment(title, message);
+        ProgressDialogFragment frag = new ProgressDialogFragment();
+        frag.setTitle(title);
+        frag.setMessage(message);
+        frag.setRetainInstance(true);
+        frag.setShowsDialog(true);
+        return frag;
     }
 
     @Override
@@ -28,8 +44,8 @@ public class ProgressDialogFragment extends DialogFragment {
         ProgressDialog dialog = new ProgressDialog(getActivity());
         dialog.setIndeterminate(true);
         dialog.setCancelable(false);
-        dialog.setTitle(title);
-        dialog.setMessage(message);
+        dialog.setTitle(getTitle());
+        dialog.setMessage(getMessage());
         dialog.setOnKeyListener(new BackButtonKeyListener());
         return dialog;
     }

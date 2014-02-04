@@ -149,6 +149,7 @@ public class BaseActivity extends RoboActivity {
         }
         ProgressDialogFragment fragment = ProgressDialogFragment.newInstance("Loading data", "Please wait");
         fragment.show(getFragmentManager(), LOADING_BAR);
+        getFragmentManager().executePendingTransactions();
     }
 
     protected void afterRequest() {
