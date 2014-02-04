@@ -2,6 +2,9 @@ package com.riaancornelius.flux;
 
 import android.annotation.TargetApi;
 import android.app.ActionBar;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -17,6 +20,7 @@ import com.octo.android.robospice.SpiceManager;
 import com.riaancornelius.flux.api.JiraSpiceService;
 import com.riaancornelius.flux.domain.Settings;
 import com.riaancornelius.flux.ui.MainActivity;
+import com.riaancornelius.flux.ui.components.ProgressDialogFragment;
 import com.riaancornelius.flux.ui.issue.IssueActivity;
 import com.riaancornelius.flux.ui.settings.SettingsActivity;
 import roboguice.activity.RoboActivity;
@@ -31,6 +35,7 @@ public class BaseActivity extends RoboActivity {
     protected static final String KEY_LAST_REQUEST_CACHE_KEY = "lastRequestCacheKey";
 
     public static final String INTENT_KEY_BOARD_ID = "INTENT_BOARD_ID";
+    private static final String LOADING_BAR = "loading_bar";
 
     protected SpiceManager spiceManager = new SpiceManager(
             JiraSpiceService.class);
@@ -137,13 +142,22 @@ public class BaseActivity extends RoboActivity {
     }
 
     protected void beforeRequest() {
-        Log.i("BaseActivity", "beforeRequest");
-        this.setProgressBarIndeterminateVisibility(true);
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        Fragment previous = getFragmentManager().findFragmentByTag(LOADING_BAR);
+        if (previous != null) {
+            transaction.remove(previous);
+        }
+        ProgressDialogFragment fragment = ProgressDialogFragment.newInstance("Loading data", "Please wait");
+        fragment.show(getFragmentManager(), LOADING_BAR);
     }
 
     protected void afterRequest() {
-        Log.i("BaseActivity", "afterRequest");
-        this.setProgressBarIndeterminateVisibility(false);
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        Fragment dialog = getFragmentManager().findFragmentByTag(LOADING_BAR);
+        if (dialog != null) {
+            transaction.remove(dialog);
+            transaction.commit();
+        }
     }
 
     protected void loadMainActivity() {
