@@ -2,15 +2,10 @@ package com.riaancornelius.flux.ui.issue;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
-import android.view.View;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.*;
-
 import com.octo.android.robospice.persistence.DurationInMillis;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
@@ -19,7 +14,6 @@ import com.riaancornelius.flux.R;
 import com.riaancornelius.flux.jira.api.request.issue.IssueRequest;
 import com.riaancornelius.flux.jira.domain.issue.Issue;
 import com.riaancornelius.flux.ui.components.CustomPagerAdapter;
-import roboguice.inject.InjectView;
 
 /**
  * User: riaan.cornelius

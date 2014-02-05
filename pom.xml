@@ -30,7 +30,7 @@
         <emma.version>2.1.5320</emma.version>
         <roboguice.version>3.0-alpha-1</roboguice.version>
 
-        <android.avd.name>Gingerbread</android.avd.name>
+        <android.avd.name>Android4</android.avd.name>
         <nonReleaseBuild>true</nonReleaseBuild>
     </properties>
 
