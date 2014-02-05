@@ -59,7 +59,7 @@ public class MainActivity extends BaseActivity {
 
         // TODO: Look these values up through the rest API
         boardId = 1L;
-        currentSprint = 3L;
+        currentSprint = 4L;
 
         // TODO: GET RID OF THIS - ONLY FOR TESTING!!:
         if(!isUserDetailsSet()){
@@ -101,7 +101,7 @@ public class MainActivity extends BaseActivity {
             editor.commit();
             Log.d("TEST", "Settings saved");
         } catch (IOException e) {
-            Log.e("TEST", e.getMessage());
+            Log.e("TEST", "IOException", e);
         }
     }
 

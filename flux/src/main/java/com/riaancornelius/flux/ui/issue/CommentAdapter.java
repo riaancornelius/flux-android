@@ -13,21 +13,19 @@ import com.riaancornelius.flux.R;
 import com.riaancornelius.flux.jira.domain.issue.Comment;
 import com.riaancornelius.flux.jira.domain.issue.Comments;
 
+
+
 /**
  * User: riaan.cornelius
  */
 public class CommentAdapter extends BaseAdapter {
 
     private static LayoutInflater inflater = null;
-    private Activity activity;
     private Comments data;
-//        public ImageLoader imageLoader;
 
-    public CommentAdapter(Activity a, Comments d) {
-        activity = a;
+    public CommentAdapter(LayoutInflater i, Comments d) {
         data = d;
-        inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//            imageLoader=new ImageLoader(activity.getApplicationContext());
+        inflater = i;
     }
 
     public int getCount() {

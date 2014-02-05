@@ -24,13 +24,14 @@ import com.riaancornelius.flux.ui.components.ProgressDialogFragment;
 import com.riaancornelius.flux.ui.issue.IssueActivity;
 import com.riaancornelius.flux.ui.settings.SettingsActivity;
 import roboguice.activity.RoboActivity;
+import roboguice.activity.RoboFragmentActivity;
 
 import java.lang.reflect.Field;
 
 /**
  * Created by riaan.cornelius on 2013/12/22.
  */
-public class BaseActivity extends RoboActivity {
+public class BaseActivity extends RoboFragmentActivity {
 
     protected static final String KEY_LAST_REQUEST_CACHE_KEY = "lastRequestCacheKey";
 

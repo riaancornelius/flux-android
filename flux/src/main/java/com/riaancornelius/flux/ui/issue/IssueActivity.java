@@ -2,11 +2,15 @@ package com.riaancornelius.flux.ui.issue;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.*;
+
 import com.octo.android.robospice.persistence.DurationInMillis;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
@@ -14,6 +18,7 @@ import com.riaancornelius.flux.BaseActivity;
 import com.riaancornelius.flux.R;
 import com.riaancornelius.flux.jira.api.request.issue.IssueRequest;
 import com.riaancornelius.flux.jira.domain.issue.Issue;
+import com.riaancornelius.flux.ui.components.CustomPagerAdapter;
 import roboguice.inject.InjectView;
 
 /**
@@ -26,9 +31,8 @@ public class IssueActivity extends BaseActivity {
     private TextView summaryField;
     private TextView assignedToField;
     private TextView descriptionField;
-    @InjectView(R.id.issue_comments_list) private ListView commentsList;
 
-    private CommentAdapter commentsAdapter;
+    private CustomPagerAdapter pagerAdapter;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +42,7 @@ public class IssueActivity extends BaseActivity {
         if (issueKey == null) {
             finish();
         }
+        pagerAdapter = new CustomPagerAdapter(getSupportFragmentManager());
         initUIComponents();
     }
 
@@ -54,6 +59,11 @@ public class IssueActivity extends BaseActivity {
         summaryField = (TextView) findViewById(R.id.issue_summary);
         assignedToField = (TextView) findViewById(R.id.issue_assigned_to);
         descriptionField = (TextView) findViewById(R.id.issue_description);
+
+        ViewPager pager = (ViewPager) findViewById(R.id.pager);
+        pager.setAdapter(pagerAdapter);
+
+        performRequest(issueKey);
     }
 
     private void performRequest(String IssueKey) {
@@ -113,16 +123,12 @@ public class IssueActivity extends BaseActivity {
                     issue.getFields().getAssignee().getDisplayName());
             descriptionField.setText(issue.getFields().getDescription());
 
-            // Just hide comments list if no comments
-            if (issue.getFields().getCommentList() == null ||
-                    issue.getFields().getCommentList().getComments().isEmpty()) {
-                commentsList.setVisibility(View.GONE);
-                return;
+            if (!(issue.getFields().getCommentList() == null) &&
+                    !issue.getFields().getCommentList().getComments().isEmpty()) {
+                IssueCommentsFragment commentsFragment = new IssueCommentsFragment();
+                commentsFragment.setComments(issue.getFields().getCommentList());
+                pagerAdapter.addFragment(commentsFragment);
             }
-
-            commentsAdapter = new CommentAdapter(IssueActivity.this, issue.getFields().getCommentList());
-            commentsList.setAdapter(commentsAdapter);
-            commentsAdapter.notifyDataSetChanged();
 
             IssueActivity.this.afterRequest();
         }

@@ -64,19 +64,11 @@
                 android:id="@+id/issue_description"/>
     </ScrollView>
 
-    <ListView android:id="@+id/issue_comments_list"
-              android:layout_width="fill_parent"
-              android:layout_height="fill_parent"
-              android:layout_below="@id/issue_description_container" />
-
-    <TextView android:id="@+id/issue_comments_list_header"
-              android:text="@string/comments"
-              android:textAppearance="?android:textAppearanceMedium"
-              style="?android:listSeparatorTextViewStyle"
-              android:layout_width="fill_parent"
-              android:layout_height="wrap_content"
-              android:padding="8dip"
-              android:layout_above="@id/issue_comments_list" />
-
+    <android.support.v4.view.ViewPager
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/pager"
+        android:layout_below="@id/issue_description_container" >
+     </android.support.v4.view.ViewPager>
 </RelativeLayout>
 
