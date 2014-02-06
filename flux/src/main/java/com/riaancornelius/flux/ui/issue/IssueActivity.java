@@ -2,7 +2,6 @@ package com.riaancornelius.flux.ui.issue;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.widget.*;
@@ -21,6 +20,7 @@ import com.riaancornelius.flux.ui.components.CustomPagerAdapter;
  */
 public class IssueActivity extends BaseActivity {
 
+    private static final String COMMENTS_KEY = "comments";
     private String issueKey;
     private TextView keyField;
     private TextView summaryField;
@@ -114,7 +114,7 @@ public class IssueActivity extends BaseActivity {
                     !issue.getFields().getCommentList().getComments().isEmpty()) {
                 IssueCommentsFragment commentsFragment = new IssueCommentsFragment();
                 commentsFragment.setComments(issue.getFields().getCommentList());
-                pagerAdapter.addFragment(commentsFragment);
+                pagerAdapter.addFragment(COMMENTS_KEY, commentsFragment);
             }
 
             IssueActivity.this.afterRequest();

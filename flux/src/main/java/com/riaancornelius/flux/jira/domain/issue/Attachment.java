@@ -24,7 +24,7 @@ public class Attachment {
     private String content;
 
     private Author author;
-    
+
     public String getRestUrl() {
         return restUrl;
     }
