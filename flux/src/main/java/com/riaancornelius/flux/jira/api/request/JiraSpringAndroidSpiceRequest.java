@@ -27,6 +27,7 @@ public abstract class JiraSpringAndroidSpiceRequest<RESULT> extends SpringAndroi
         HttpEntity<String> entity = new HttpEntity<String>(headers);
 
         Log.i("REST", "restTemplate: " + restTemplate);
+        Log.i("REST", "Url = " + buildUrl());
         ResponseEntity<RESULT> responseEntity = restTemplate.exchange(buildUrl(), getHttpMethodType(), entity, getResultType());
         Log.i("REST", "responseEntity: " + responseEntity);
         Log.i("REST", "responseEntity status: " + responseEntity.getStatusCode().getReasonPhrase());

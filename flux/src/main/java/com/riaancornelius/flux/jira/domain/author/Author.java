@@ -1,12 +1,17 @@
 package com.riaancornelius.flux.jira.domain.author;
 
 import com.riaancornelius.flux.jira.domain.author.AvatarUrls;
+
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 
 /**
  * User: riaan.cornelius
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Author {
+
+    private String key;
 
     private String name;
 
@@ -67,5 +72,13 @@ public class Author {
 
     public void setAvatarUrls(AvatarUrls avatarUrls) {
         this.avatarUrls = avatarUrls;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
     }
 }

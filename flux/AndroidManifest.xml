@@ -28,6 +28,7 @@
         <activity android:name=".ui.sprint.SprintsActivity"/>
         <activity android:name=".ui.issue.IssueActivity"/>
         <activity android:name=".ui.settings.SettingsActivity"/>
+        <activity android:name=".ui.issue.UserSelectActivity"/>
         <!-- For testing -->
         <uses-library android:name="android.test.runner" />
 

@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
+import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.octo.android.robospice.persistence.DurationInMillis;
@@ -22,6 +24,8 @@ public class IssueActivity extends BaseActivity {
 
     private static final String COMMENTS_KEY = "comments";
     private static final String ATTACHMENTS_KEY = "attachments";
+    private static final int USER_SELECT = 1;
+    private static final String TAG = "IssueActivity";
     private String issueKey;
     private TextView keyField;
     private TextView summaryField;
@@ -59,12 +63,29 @@ public class IssueActivity extends BaseActivity {
         ViewPager pager = (ViewPager) findViewById(R.id.pager);
         pager.setAdapter(pagerAdapter);
 
-        performRequest(issueKey);
+        assignedToField.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(IssueActivity.this, UserSelectActivity.class);
+                startActivityForResult(intent, USER_SELECT);
+            }
+        });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        if (requestCode == USER_SELECT) {
+            //handle it here
+            String userKey = intent.getStringExtra(UserSelectActivity.USER_KEY);
+            Log.d(TAG, "Reassigning issue "  + issueKey + " to user " + userKey);
+            //TODO update issue with new user (see UpdateIssueRequest)
+        } else {
+            super.onActivityResult(requestCode, resultCode, intent);
+        }
     }
 
     private void performRequest(String IssueKey) {
         beforeRequest();
-
         IssueRequest request = new IssueRequest(IssueKey);
         lastRequestCacheKey = request.createCacheKey();
         spiceManager.execute(request, lastRequestCacheKey,
@@ -115,8 +136,12 @@ public class IssueActivity extends BaseActivity {
 
             keyField.setText(issue.getKey());
             summaryField.setText(issue.getFields().getSummary());
-            assignedToField.setText( //getResources().getString(R.string.assigned_to) + " " +
-                    issue.getFields().getAssignee().getDisplayName());
+            if (issue.getFields().getAssignee() != null) {
+                assignedToField.setText( //getResources().getString(R.string.assigned_to) + " " +
+                        issue.getFields().getAssignee().getDisplayName());
+            } else {
+                assignedToField.setText(R.string.unassigned);
+            }
             descriptionField.setText(issue.getFields().getDescription());
 
             if (!(issue.getFields().getCommentList() == null) &&
@@ -136,4 +161,5 @@ public class IssueActivity extends BaseActivity {
             IssueActivity.this.afterRequest();
         }
     }
+
 }

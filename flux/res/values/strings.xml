@@ -28,5 +28,7 @@
     <string name="pref_username_summary">Your Jira account username</string>
     <string name="pref_password">Jira password</string>
     <string name="pref_password_summary">Your Jira account password</string>
+    <string name="unassigned">Unassigned</string>
+    <string name="enter_value">Please enter a search value</string>
 
 </resources>
