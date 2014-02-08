@@ -19,5 +19,6 @@
     <string name="prompt_username">Username:</string>
     <string name="augmented_view">Augmented View</string>
     <string name="comments">Comments</string>
+    <string name="attachments">Attachments</string>
 
 </resources>

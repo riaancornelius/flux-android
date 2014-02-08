@@ -21,6 +21,7 @@ import com.riaancornelius.flux.ui.components.CustomPagerAdapter;
 public class IssueActivity extends BaseActivity {
 
     private static final String COMMENTS_KEY = "comments";
+    private static final String ATTACHMENTS_KEY = "attachments";
     private String issueKey;
     private TextView keyField;
     private TextView summaryField;
@@ -116,6 +117,13 @@ public class IssueActivity extends BaseActivity {
                 commentsFragment.setComments(issue.getFields().getCommentList());
                 pagerAdapter.addFragment(COMMENTS_KEY, commentsFragment);
             }
+
+            if (issue.getFields().getAttachmentList() != null && !issue.getFields().getAttachmentList().isEmpty()) {
+                IssueAttachmentsFragment attachmentsFragment = new IssueAttachmentsFragment();
+                attachmentsFragment.setAttachments(issue.getFields().getAttachmentList());
+                pagerAdapter.addFragment(ATTACHMENTS_KEY, attachmentsFragment);
+            }
+
 
             IssueActivity.this.afterRequest();
         }
