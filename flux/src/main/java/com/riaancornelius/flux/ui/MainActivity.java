@@ -21,7 +21,7 @@ import com.riaancornelius.flux.jira.api.request.sprint.SprintReportRequest;
 import com.riaancornelius.flux.jira.domain.sprint.Sprint;
 import com.riaancornelius.flux.jira.domain.sprint.report.SprintReport;
 import com.riaancornelius.flux.ui.issue.IssueActivity;
-import com.riaancornelius.flux.ui.sprint.SprintsActivity;
+import com.riaancornelius.flux.ui.issue.IssueListActivity;
 import com.riaancornelius.flux.util.DateUtil;
 import roboguice.inject.InjectView;
 
@@ -124,8 +124,23 @@ public class MainActivity extends BaseActivity {
     }
 
     public void onViewSprintsClick(View view) {
-        Intent myIntent = new Intent(MainActivity.this, SprintsActivity.class);
+//        Intent myIntent = new Intent(MainActivity.this, SprintsActivity.class);
+//        myIntent.putExtra(BaseActivity.INTENT_KEY_BOARD_ID, boardId);
+//        MainActivity.this.startActivity(myIntent);
+        Intent myIntent = new Intent(MainActivity.this, IssueListActivity.class);
         myIntent.putExtra(BaseActivity.INTENT_KEY_BOARD_ID, boardId);
+        myIntent.putExtra(BaseActivity.INTENT_KEY_SPRINT_ID, currentSprint);
+        MainActivity.this.startActivity(myIntent);
+    }
+
+    public void onIssueListButtonClick(View view) {
+//        Intent myIntent = new Intent(MainActivity.this, SprintsActivity.class);
+//        myIntent.putExtra(BaseActivity.INTENT_KEY_BOARD_ID, boardId);
+//        MainActivity.this.startActivity(myIntent);
+        Intent myIntent = new Intent(MainActivity.this, IssueListActivity.class);
+        myIntent.putExtra(BaseActivity.INTENT_KEY_BOARD_ID, boardId);
+        myIntent.putExtra(BaseActivity.INTENT_KEY_SPRINT_ID, currentSprint);
+        myIntent.putExtra(BaseActivity.INTENT_KEY_REQUESTING_ID, view.getId());
         MainActivity.this.startActivity(myIntent);
     }
 
@@ -173,9 +188,9 @@ public class MainActivity extends BaseActivity {
                         DateUtil.formatDate(activeSprint.getStartDate())
                         + " - " +
                         DateUtil.formatDate(activeSprint.getEndDate()));
-                sprintSummaryTotal.setText(Long.toString(sprintReport.getContents().getAllIssuesEstimateSum().getValue()));
-                sprintSummaryCompleted.setText(Long.toString(sprintReport.getContents().getCompletedIssuesEstimateSum().getValue()));
-                sprintSummaryUncompleted.setText(Long.toString(sprintReport.getContents().getIncompletedIssuesEstimateSum().getValue()));
+                sprintSummaryTotal.setText(Double.toString(sprintReport.getContents().getAllIssuesEstimateSum().getValue()));
+                sprintSummaryCompleted.setText(Double.toString(sprintReport.getContents().getCompletedIssuesEstimateSum().getValue()));
+                sprintSummaryUncompleted.setText(Double.toString(sprintReport.getContents().getIncompletedIssuesEstimateSum().getValue()));
             }
             Log.d("TEST", "Found sprints: " + sprintReport.getSprint().getName());
         }

@@ -30,5 +30,8 @@
     <string name="pref_password_summary">Your Jira account password</string>
     <string name="unassigned">Unassigned</string>
     <string name="enter_value">Please enter a search value</string>
+    <string name="issues">Issues</string>
+    <string name="issue">Issue</string>
+    <string name="issues_in_this_sprint">Issues in this sprint</string>
 
 </resources>

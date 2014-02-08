@@ -144,4 +144,23 @@ public class IssueFields {
     public void setAttachmentList(ArrayList<Attachment> attachmentList) {
         this.attachmentList = attachmentList;
     }
+
+    @Override
+    public String toString() {
+        return "IssueFields{" +
+                "summary='" + summary + '\'' +
+                ", issueType=" + issueType +
+                ", created=" + created +
+                ", updated=" + updated +
+                ", description='" + description + '\'' +
+                ", lastViewed=" + lastViewed +
+                ", priority=" + priority +
+                ", status=" + status +
+                ", components=" + components +
+                ", reporter=" + reporter +
+                ", assignee=" + assignee +
+                ", commentList=" + commentList +
+                ", attachmentList=" + attachmentList +
+                '}';
+    }
 }
