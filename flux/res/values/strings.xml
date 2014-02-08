@@ -19,6 +19,7 @@
     <string name="prompt_username">Username:</string>
     <string name="augmented_view">Augmented View</string>
     <string name="comments">Comments</string>
+    <string name="attachments">Attachments</string>
 
     <string name="pref_jira_category">Jira Settings</string>
     <string name="pref_base_url">Jira base URL</string>
