@@ -1,7 +1,9 @@
 package com.riaancornelius.flux.jira.api.request;
 
 import android.util.Log;
+
 import com.octo.android.robospice.request.springandroid.SpringAndroidSpiceRequest;
+
 import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
 
@@ -36,7 +38,7 @@ public abstract class JiraSpringAndroidSpiceRequest<RESULT> extends SpringAndroi
         return responseEntity.getBody();
     }
 
-    protected String buildUrl(){
+    protected String buildUrl() {
         return getBaseUrl() + getUrlFragment();
     }
 
@@ -60,10 +62,10 @@ public abstract class JiraSpringAndroidSpiceRequest<RESULT> extends SpringAndroi
 
     /**
      * Get the last part of the url that specifies the rest service to call with all it's parameters populated.
-     *
+     * <p/>
      * Let's say you want to call:
      * https://projectflux.atlassian.net/rest/greenhopper/latest/rapid/charts/sprintreport?rapidViewId=1&sprintId=3
-     *
+     * <p/>
      * The base url would be 'https://projectflux.atlassian.net/' and this method should return:
      * 'rest/greenhopper/latest/rapid/charts/sprintreport?rapidViewId=1&sprintId=3'
      *

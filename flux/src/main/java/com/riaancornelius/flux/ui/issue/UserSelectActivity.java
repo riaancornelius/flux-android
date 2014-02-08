@@ -3,6 +3,7 @@ package com.riaancornelius.flux.ui.issue;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -34,6 +35,7 @@ import roboguice.inject.InjectView;
 public class UserSelectActivity extends BaseActivity {
 
     public static final String USER_KEY = "UserKey";
+    private static final String TAG = "UserSelectActivity";
 
     @InjectView(R.id.search)
     private ImageButton search;
@@ -54,6 +56,7 @@ public class UserSelectActivity extends BaseActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int index, long l) {
                 Author a = (Author) adapter.getItem(index);
+                Log.d(TAG, "Selected " + a.getDisplayName());
                 returnToPrevious(a.getKey());
             }
         });
@@ -77,6 +80,7 @@ public class UserSelectActivity extends BaseActivity {
     }
 
     protected void returnToPrevious(String userKey) {
+        Log.d(TAG, "Returning to previous: " + userKey);
         Intent returnIntent = new Intent();
         returnIntent.putExtra(USER_KEY, userKey);
         setResult(RESULT_OK, returnIntent);

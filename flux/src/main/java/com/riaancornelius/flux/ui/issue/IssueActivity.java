@@ -8,12 +8,15 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.octo.android.robospice.persistence.DurationInMillis;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 import com.riaancornelius.flux.BaseActivity;
 import com.riaancornelius.flux.R;
 import com.riaancornelius.flux.jira.api.request.issue.IssueRequest;
+import com.riaancornelius.flux.jira.api.request.issue.UpdateIssueRequest;
+import com.riaancornelius.flux.jira.domain.author.Author;
 import com.riaancornelius.flux.jira.domain.issue.Issue;
 import com.riaancornelius.flux.ui.components.CustomPagerAdapter;
 
@@ -33,6 +36,7 @@ public class IssueActivity extends BaseActivity {
     private TextView descriptionField;
 
     private CustomPagerAdapter pagerAdapter;
+    private Issue issue;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,8 +81,16 @@ public class IssueActivity extends BaseActivity {
         if (requestCode == USER_SELECT) {
             //handle it here
             String userKey = intent.getStringExtra(UserSelectActivity.USER_KEY);
-            Log.d(TAG, "Reassigning issue "  + issueKey + " to user " + userKey);
+            Log.d(TAG, "Reassigning issue " + issueKey + " to user " + userKey);
             //TODO update issue with new user (see UpdateIssueRequest)
+            if (issue != null) {
+                if (issue.getFields().getAssignee() == null) {
+                    issue.getFields().setAssignee(new Author());
+                }
+                issue.getFields().getAssignee().setKey(userKey);
+                UpdateIssueRequest request = new UpdateIssueRequest(issue);
+                spiceManager.getFromCacheAndLoadFromNetworkIfExpired(request, "update", DurationInMillis.ALWAYS_EXPIRED, new IssueUpdateListener());
+            }
         } else {
             super.onActivityResult(requestCode, resultCode, intent);
         }
@@ -127,38 +139,55 @@ public class IssueActivity extends BaseActivity {
         }
 
         @Override
-        public void onRequestSuccess(Issue issue) {
+        public void onRequestSuccess(Issue issueReturned) {
             // Issue could be null just if contentManager.getFromCache(...)
             // doesn't return anything.
-            if (issue == null) {
+            if (issueReturned == null) {
                 return;
             }
 
-            keyField.setText(issue.getKey());
-            summaryField.setText(issue.getFields().getSummary());
-            if (issue.getFields().getAssignee() != null) {
+            issue = issueReturned;
+
+            keyField.setText(issueReturned.getKey());
+            summaryField.setText(issueReturned.getFields().getSummary());
+            if (issueReturned.getFields().getAssignee() != null) {
                 assignedToField.setText( //getResources().getString(R.string.assigned_to) + " " +
-                        issue.getFields().getAssignee().getDisplayName());
+                        issueReturned.getFields().getAssignee().getDisplayName());
             } else {
                 assignedToField.setText(R.string.unassigned);
             }
-            descriptionField.setText(issue.getFields().getDescription());
+            descriptionField.setText(issueReturned.getFields().getDescription());
 
-            if (!(issue.getFields().getCommentList() == null) &&
-                    !issue.getFields().getCommentList().getComments().isEmpty()) {
+            if (!(issueReturned.getFields().getCommentList() == null) &&
+                    !issueReturned.getFields().getCommentList().getComments().isEmpty()) {
                 IssueCommentsFragment commentsFragment = new IssueCommentsFragment();
-                commentsFragment.setComments(issue.getFields().getCommentList());
+                commentsFragment.setComments(issueReturned.getFields().getCommentList());
                 pagerAdapter.addFragment(COMMENTS_KEY, commentsFragment);
             }
 
-            if (issue.getFields().getAttachmentList() != null && !issue.getFields().getAttachmentList().isEmpty()) {
+            if (issueReturned.getFields().getAttachmentList() != null && !issueReturned.getFields().getAttachmentList().isEmpty()) {
                 IssueAttachmentsFragment attachmentsFragment = new IssueAttachmentsFragment();
-                attachmentsFragment.setAttachments(issue.getFields().getAttachmentList());
+                attachmentsFragment.setAttachments(issueReturned.getFields().getAttachmentList());
                 pagerAdapter.addFragment(ATTACHMENTS_KEY, attachmentsFragment);
             }
 
 
             IssueActivity.this.afterRequest();
+        }
+    }
+
+    private class IssueUpdateListener implements RequestListener<String> {
+
+        @Override
+        public void onRequestFailure(SpiceException e) {
+            Log.d(TAG, "Request failed",e);
+            Toast.makeText(IssueActivity.this, e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+        }
+
+        @Override
+        public void onRequestSuccess(String s) {
+            Log.d(TAG, "Success: " + s);
+            Toast.makeText(IssueActivity.this, s, Toast.LENGTH_LONG).show();
         }
     }
 
