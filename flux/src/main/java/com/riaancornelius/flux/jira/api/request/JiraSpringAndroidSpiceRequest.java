@@ -5,6 +5,7 @@ import android.util.Log;
 import com.octo.android.robospice.request.springandroid.SpringAndroidSpiceRequest;
 
 import org.springframework.http.*;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 /**
@@ -16,6 +17,12 @@ public abstract class JiraSpringAndroidSpiceRequest<RESULT> extends SpringAndroi
 
     protected String baseUrl;
 
+    private Object requestBody;
+
+    protected void setRequestBody(Object body) {
+        this.requestBody = body;
+    }
+
     public JiraSpringAndroidSpiceRequest(Class<RESULT> clazz) {
         super(clazz);
     }
@@ -26,11 +33,21 @@ public abstract class JiraSpringAndroidSpiceRequest<RESULT> extends SpringAndroi
         HttpHeaders headers = new HttpHeaders();
         headers.setAuthorization(getHttpAuthentication());
 
-        HttpEntity<String> entity = new HttpEntity<String>(headers);
+        HttpEntity<Object> entity;
+        if (requestBody == null) {
+            entity = new HttpEntity<Object>(headers);
+        } else {
+            entity = new HttpEntity<Object>(requestBody, headers);
+        }
+
+        Log.i("REST", "Body = " + entity.getBody());
+        Log.i("REST", "Headers = " + entity.getHeaders().toString());
 
         Log.i("REST", "restTemplate: " + restTemplate);
         Log.i("REST", "Url = " + buildUrl());
+
         ResponseEntity<RESULT> responseEntity = restTemplate.exchange(buildUrl(), getHttpMethodType(), entity, getResultType());
+
         Log.i("REST", "responseEntity: " + responseEntity);
         Log.i("REST", "responseEntity status: " + responseEntity.getStatusCode().getReasonPhrase());
         Log.i("REST", "responseEntity status: " + responseEntity.getBody());

@@ -187,7 +187,8 @@ public class IssueActivity extends BaseActivity {
         @Override
         public void onRequestSuccess(String s) {
             Log.d(TAG, "Success: " + s);
-            Toast.makeText(IssueActivity.this, s, Toast.LENGTH_LONG).show();
+            Toast.makeText(IssueActivity.this, "Success!", Toast.LENGTH_LONG).show();
+            performRequest(issueKey);
         }
     }
 
