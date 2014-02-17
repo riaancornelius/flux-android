@@ -6,6 +6,9 @@ import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,7 +35,10 @@ public class IssueActivity extends BaseActivity {
     private String issueKey;
     private TextView keyField;
     private TextView summaryField;
+    private LinearLayout assignedToFields;
     private TextView assignedToField;
+    private ImageView assignedToImage;
+    private ProgressBar imageProgress;
     private TextView descriptionField;
 
     private CustomPagerAdapter pagerAdapter;
@@ -61,13 +67,19 @@ public class IssueActivity extends BaseActivity {
     private void initUIComponents() {
         keyField = (TextView) findViewById(R.id.issue_key);
         summaryField = (TextView) findViewById(R.id.issue_summary);
+        assignedToFields = (LinearLayout) findViewById(R.id.user_fields);
         assignedToField = (TextView) findViewById(R.id.issue_assigned_to);
+        assignedToImage = (ImageView) findViewById(R.id.issue_assigned_image);
+        imageProgress = (ProgressBar) findViewById(R.id.loader);
         descriptionField = (TextView) findViewById(R.id.issue_description);
+
+        assignedToImage.setVisibility(View.INVISIBLE);
+        imageProgress.setVisibility(View.VISIBLE);
 
         ViewPager pager = (ViewPager) findViewById(R.id.pager);
         pager.setAdapter(pagerAdapter);
 
-        assignedToField.setOnClickListener(new View.OnClickListener() {
+        assignedToFields.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(IssueActivity.this, UserSelectActivity.class);
@@ -151,10 +163,12 @@ public class IssueActivity extends BaseActivity {
             keyField.setText(issueReturned.getKey());
             summaryField.setText(issueReturned.getFields().getSummary());
             if (issueReturned.getFields().getAssignee() != null) {
-                assignedToField.setText( //getResources().getString(R.string.assigned_to) + " " +
-                        issueReturned.getFields().getAssignee().getDisplayName());
+                assignedToField.setText( issueReturned.getFields().getAssignee().getDisplayName());
+                //set image: issueReturned.getFields().getAssignee().getAvatarUrls().getFortyEightSquareUrl()
+
             } else {
                 assignedToField.setText(R.string.unassigned);
+                //default: https://secure.gravatar.com/avatar/17f13d9f230593332dba4190eb839037?d=mm&s=48
             }
             descriptionField.setText(issueReturned.getFields().getDescription());
 
@@ -170,7 +184,6 @@ public class IssueActivity extends BaseActivity {
                 attachmentsFragment.setAttachments(issueReturned.getFields().getAttachmentList());
                 pagerAdapter.addFragment(ATTACHMENTS_KEY, attachmentsFragment);
             }
-
 
             IssueActivity.this.afterRequest();
         }

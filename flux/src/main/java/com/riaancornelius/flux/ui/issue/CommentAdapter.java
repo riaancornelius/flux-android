@@ -54,6 +54,7 @@ public class CommentAdapter extends BaseAdapter {
 
         // Setting all values in listview
         Log.d("COMMENT", comment.toString());
+        Log.d("COMMENT BODY" , comment.getBody());
         firstLine.setText(comment.getBody());
         secondLine.setText(comment.getCreated().toString());
 //            imageLoader.DisplayImage(song.get(CustomizedListView.KEY_THUMB_URL), thumb_image);
