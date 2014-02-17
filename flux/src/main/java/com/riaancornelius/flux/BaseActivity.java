@@ -38,6 +38,9 @@ public class BaseActivity extends RoboFragmentActivity {
     protected static final String KEY_LAST_REQUEST_CACHE_KEY = "lastRequestCacheKey";
 
     public static final String INTENT_KEY_BOARD_ID = "INTENT_BOARD_ID";
+    public static final String INTENT_KEY_SPRINT_ID = "INTENT_SPRINT_ID";
+    public static final String INTENT_KEY_REQUESTING_ID = "INTENT_REQUESTING_ID";
+
     private static final String LOADING_BAR = "loading_bar";
 
     protected SpiceManager spiceManager = new SpiceManager(

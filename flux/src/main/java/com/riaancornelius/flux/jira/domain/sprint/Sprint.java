@@ -4,11 +4,13 @@ import com.riaancornelius.flux.jira.JsonDateDeserializer;
 import com.riaancornelius.flux.jira.JsonDateSerializer;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonDeserialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * User: riaan.cornelius
@@ -36,8 +38,9 @@ public class Sprint {
     @JsonSerialize(using = JsonDateSerializer.class)
     private Date completedDate;
 
+    //@TODO: Create a RemoteLink object
     @JsonIgnore
-    private ArrayList remoteLinks;
+    private List<Object> remoteLinks = new ArrayList<Object>();
 
     public long getId() {
         return id;
@@ -95,11 +98,5 @@ public class Sprint {
         this.completedDate = completedDate;
     }
 
-    public ArrayList getRemoteLinks() {
-        return remoteLinks;
-    }
 
-    public void setRemoteLinks(ArrayList remoteLinks) {
-        this.remoteLinks = remoteLinks;
-    }
 }

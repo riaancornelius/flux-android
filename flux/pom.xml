@@ -87,12 +87,11 @@
 				<artifactId>android-maven-plugin</artifactId>
 				<extensions>true</extensions>
                 <configuration>
-                    <emulator>
-                        <!-- the name of the avd device to use for starting the emulator -->
-                        <avd>${android.avd.name}</avd>
-                        <options>-no-skin</options>
-                        <wait>90000</wait>
-                    </emulator>
+                    <!--<emulator>-->
+                        <!--<avd>${android.avd.name}</avd>-->
+                        <!--<options>-no-skin</options>-->
+                        <!--<wait>90000</wait>-->
+                    <!--</emulator>-->
                     <sdk>
                         <!-- platform or api level (api level 4 = platform 1.6) -->
                         <platform>${android.platform}</platform>
@@ -110,15 +109,15 @@
                         <versionName>${project.version}</versionName>
                     </manifest>
                 </configuration>
-                <executions>
-                    <execution>
-                        <id>startEmulator</id>
-                        <phase>initialize</phase>
-                        <goals>
-                            <goal>emulator-start</goal>
-                        </goals>
-                    </execution>
-                </executions>
+                <!--<executions>-->
+                    <!--<execution>-->
+                        <!--<id>startEmulator</id>-->
+                        <!--<phase>initialize</phase>-->
+                        <!--<goals>-->
+                            <!--<goal>emulator-start</goal>-->
+                        <!--</goals>-->
+                    <!--</execution>-->
+                <!--</executions>-->
 			</plugin>
 
             <plugin>

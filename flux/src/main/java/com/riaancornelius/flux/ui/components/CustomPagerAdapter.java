@@ -14,7 +14,7 @@ import java.util.Map;
 /**
  * @author Elsabe
  */
-public class CustomPagerAdapter extends FragmentPagerAdapter{
+public class CustomPagerAdapter extends FragmentPagerAdapter {
     //list of fragments to page
     private Map<String, Fragment> fragments;
 
@@ -38,5 +38,17 @@ public class CustomPagerAdapter extends FragmentPagerAdapter{
     @Override
     public int getCount() {
         return fragments.size();
+    }
+
+    @Override
+    public CharSequence getPageTitle(int position) {
+        if (position<0 || position>getCount()-1) {
+            return "";
+        }
+        Fragment item = getItem(position);
+        if (item instanceof TitledFragment){
+            return ((TitledFragment) item).getTitle();
+        }
+        throw new IllegalArgumentException("Can only get page title for TitledFragment");
     }
 }

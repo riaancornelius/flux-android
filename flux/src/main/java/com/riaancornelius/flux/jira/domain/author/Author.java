@@ -81,4 +81,16 @@ public class Author {
     public void setKey(String key) {
         this.key = key;
     }
+
+    @Override
+    public String toString() {
+        return "Author{" +
+                "name='" + name + '\'' +
+                ", emailAddress='" + emailAddress + '\'' +
+                ", displayName='" + displayName + '\'' +
+                ", active=" + active +
+                ", restUrl='" + restUrl + '\'' +
+                ", avatarUrls=" + avatarUrls +
+                '}';
+    }
 }

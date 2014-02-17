@@ -51,4 +51,14 @@ public class Issue {
     public void setFields(IssueFields fields) {
         this.fields = fields;
     }
+
+    @Override
+    public String toString() {
+        return "Issue{" +
+                "id=" + id +
+                ", key='" + key + '\'' +
+                ", restUrl='" + restUrl + '\'' +
+                ", fields=" + fields +
+                '}';
+    }
 }
