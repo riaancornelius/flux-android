@@ -1,6 +1,7 @@
 package com.riaancornelius.flux.ui.issue;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
@@ -12,16 +13,22 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.DurationInMillis;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
+import com.octo.android.robospice.request.simple.BitmapRequest;
 import com.riaancornelius.flux.BaseActivity;
 import com.riaancornelius.flux.R;
+import com.riaancornelius.flux.api.ImageSpiceService;
 import com.riaancornelius.flux.jira.api.request.issue.IssueRequest;
 import com.riaancornelius.flux.jira.api.request.issue.UpdateIssueRequest;
+import com.riaancornelius.flux.jira.api.service.JiraJacksonSpringAndroidSpiceService;
 import com.riaancornelius.flux.jira.domain.author.Author;
 import com.riaancornelius.flux.jira.domain.issue.Issue;
 import com.riaancornelius.flux.ui.components.CustomPagerAdapter;
+
+import java.io.File;
 
 /**
  * User: riaan.cornelius
@@ -44,6 +51,8 @@ public class IssueActivity extends BaseActivity {
     private CustomPagerAdapter pagerAdapter;
     private Issue issue;
 
+    private SpiceManager imageSpiceManager = new SpiceManager(ImageSpiceService.class);
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_issue);
@@ -60,6 +69,13 @@ public class IssueActivity extends BaseActivity {
     protected void onStart() {
         super.onStart();
         performRequest(issueKey);
+        imageSpiceManager.start(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        imageSpiceManager.shouldStop();
     }
 
     private String lastRequestCacheKey;
@@ -113,8 +129,7 @@ public class IssueActivity extends BaseActivity {
         IssueRequest request = new IssueRequest(IssueKey);
         lastRequestCacheKey = request.createCacheKey();
         spiceManager.execute(request, lastRequestCacheKey,
-                DurationInMillis.NEVER, // ONLY FOR TESTING
-                //DurationInMillis.ONE_MINUTE,
+                DurationInMillis.ONE_MINUTE,
                 new IssueRequestListener());
     }
 
@@ -155,6 +170,7 @@ public class IssueActivity extends BaseActivity {
             // Issue could be null just if contentManager.getFromCache(...)
             // doesn't return anything.
             if (issueReturned == null) {
+                Log.d(TAG, "Issue returned is null");
                 return;
             }
 
@@ -162,13 +178,16 @@ public class IssueActivity extends BaseActivity {
 
             keyField.setText(issueReturned.getKey());
             summaryField.setText(issueReturned.getFields().getSummary());
-            if (issueReturned.getFields().getAssignee() != null) {
-                assignedToField.setText( issueReturned.getFields().getAssignee().getDisplayName());
-                //set image: issueReturned.getFields().getAssignee().getAvatarUrls().getFortyEightSquareUrl()
 
+            if (issueReturned.getFields().getAssignee() != null) {
+                String displayName = issueReturned.getFields().getAssignee().getDisplayName();
+                assignedToField.setText(displayName);
+               BitmapRequest imageRequest = new BitmapRequest(issueReturned.getFields().getAssignee().getAvatarUrls().getFortyEightSquareUrl(), new File(getFilesDir(), displayName+".cache"));
+                imageSpiceManager.getFromCacheAndLoadFromNetworkIfExpired(imageRequest, "image"+displayName, DurationInMillis.ONE_WEEK, new ImageListener());
             } else {
                 assignedToField.setText(R.string.unassigned);
-                //default: https://secure.gravatar.com/avatar/17f13d9f230593332dba4190eb839037?d=mm&s=48
+                BitmapRequest imageRequest = new BitmapRequest("https://secure.gravatar.com/avatar/17f13d9f230593332dba4190eb839037?d=mm&s=48", new File(getFilesDir(),"unassigned.cache"));
+                imageSpiceManager.getFromCacheAndLoadFromNetworkIfExpired(imageRequest, "imageunassigned", DurationInMillis.ALWAYS_RETURNED, new ImageListener());
             }
             descriptionField.setText(issueReturned.getFields().getDescription());
 
@@ -202,6 +221,22 @@ public class IssueActivity extends BaseActivity {
             Log.d(TAG, "Success: " + s);
             Toast.makeText(IssueActivity.this, "Success!", Toast.LENGTH_LONG).show();
             performRequest(issueKey);
+        }
+    }
+
+    private class ImageListener implements RequestListener<Bitmap> {
+        @Override
+        public void onRequestFailure(SpiceException e) {
+            Log.e(TAG, "Could not load image", e);
+            imageProgress.setVisibility(View.INVISIBLE);
+            Toast.makeText(IssueActivity.this, "Could not load user image", Toast.LENGTH_LONG);
+        }
+
+        @Override
+        public void onRequestSuccess(Bitmap bitmap) {
+            assignedToImage.setVisibility(View.VISIBLE);
+            assignedToImage.setImageBitmap(bitmap);
+            imageProgress.setVisibility(View.INVISIBLE);
         }
     }
 
