@@ -59,6 +59,7 @@ public class BaseActivity extends RoboFragmentActivity {
     public void onCreate(Bundle savedInstanceState) {
         Log.i("BaseActivity", "onCreate");
         super.onCreate(savedInstanceState);
+
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         if (savedInstanceState != null) {
             //@TODO
