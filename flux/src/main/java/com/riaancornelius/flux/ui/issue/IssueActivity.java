@@ -101,7 +101,8 @@ public class IssueActivity extends BaseActivity {
                 }
                 issue.getFields().getAssignee().setKey(userKey);
                 UpdateIssueRequest request = new UpdateIssueRequest(issue);
-                spiceManager.getFromCacheAndLoadFromNetworkIfExpired(request, "update", DurationInMillis.ALWAYS_EXPIRED, new IssueUpdateListener());
+                spiceManager.getFromCacheAndLoadFromNetworkIfExpired(request, "update",
+                        DurationInMillis.ONE_WEEK, new IssueUpdateListener());
             }
         } else {
             super.onActivityResult(requestCode, resultCode, intent);
@@ -113,8 +114,7 @@ public class IssueActivity extends BaseActivity {
         IssueRequest request = new IssueRequest(IssueKey);
         lastRequestCacheKey = request.createCacheKey();
         spiceManager.execute(request, lastRequestCacheKey,
-                DurationInMillis.NEVER, // ONLY FOR TESTING
-                //DurationInMillis.ONE_MINUTE,
+                DurationInMillis.ONE_WEEK,
                 new IssueRequestListener());
     }
 
@@ -135,7 +135,7 @@ public class IssueActivity extends BaseActivity {
             spiceManager.addListenerIfPending(Issue.class,
                     lastRequestCacheKey, new IssueRequestListener());
             spiceManager.getFromCache(Issue.class,
-                    lastRequestCacheKey, DurationInMillis.ONE_MINUTE,
+                    lastRequestCacheKey, DurationInMillis.ONE_WEEK,
                     new IssueRequestListener());
         }
     }

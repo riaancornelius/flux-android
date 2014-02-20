@@ -109,7 +109,7 @@ public class MainActivity extends BaseActivity {
         super.beforeRequest();
         SprintReportRequest request = new SprintReportRequest(boardId, currentSprint);
         lastRequestCacheKey = request.createCacheKey();
-        spiceManager.execute(request, lastRequestCacheKey, DurationInMillis.ONE_MINUTE * 5, new SprintReportRequestListener());
+        spiceManager.execute(request, lastRequestCacheKey, DurationInMillis.ONE_WEEK, new SprintReportRequestListener());
     }
 
     public void onScanTicketClick(View view) {
@@ -161,7 +161,7 @@ public class MainActivity extends BaseActivity {
             spiceManager.addListenerIfPending(SprintReport.class,
                     lastRequestCacheKey, new SprintReportRequestListener());
             spiceManager.getFromCache(SprintReport.class,
-                    lastRequestCacheKey, DurationInMillis.ONE_MINUTE,
+                    lastRequestCacheKey, DurationInMillis.ONE_WEEK,
                     new SprintReportRequestListener());
         }
     }

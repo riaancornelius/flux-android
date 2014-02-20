@@ -76,7 +76,8 @@ public class UserSelectActivity extends BaseActivity {
     private void performSearch(String queryString) {
         beforeRequest();
         UserRequest request = new UserRequest(queryString);
-        spiceManager.getFromCacheAndLoadFromNetworkIfExpired(request, request.getCacheKey(), DurationInMillis.ONE_HOUR, new UserRequestListener());
+        spiceManager.getFromCacheAndLoadFromNetworkIfExpired(request, request.getCacheKey(),
+                DurationInMillis.ONE_WEEK, new UserRequestListener());
     }
 
     protected void returnToPrevious(String userKey) {

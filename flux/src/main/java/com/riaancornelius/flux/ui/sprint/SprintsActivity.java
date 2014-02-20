@@ -84,7 +84,7 @@ public class SprintsActivity extends BaseActivity implements SpiceCallback {
             spiceManager.addListenerIfPending(Sprints.class,
                     lastRequestCacheKey, new ListSprintsRequestListener());
             spiceManager.getFromCache(Sprints.class,
-                    lastRequestCacheKey, DurationInMillis.ONE_MINUTE,
+                    lastRequestCacheKey, DurationInMillis.ONE_WEEK,
                     new ListSprintsRequestListener());
         }
     }

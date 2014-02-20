@@ -91,7 +91,7 @@ public class IssueListActivity extends BaseActivity implements SpiceCallback {
         SprintReportRequest request = new SprintReportRequest(board, sprintId);
         lastRequestCacheKey = request.createCacheKey();
         spiceManager.execute(request, lastRequestCacheKey,
-                DurationInMillis.ALWAYS_EXPIRED, new ListSprintReportRequestListener());
+                DurationInMillis.ONE_WEEK, new ListSprintReportRequestListener());
     }
 
     @Override
@@ -111,7 +111,7 @@ public class IssueListActivity extends BaseActivity implements SpiceCallback {
             spiceManager.addListenerIfPending(SprintReport.class,
                     lastRequestCacheKey, new ListSprintReportRequestListener());
             spiceManager.getFromCache(SprintReport.class,
-                    lastRequestCacheKey, DurationInMillis.ONE_MINUTE,
+                    lastRequestCacheKey, DurationInMillis.ONE_WEEK,
                     new ListSprintReportRequestListener());
         }
     }
