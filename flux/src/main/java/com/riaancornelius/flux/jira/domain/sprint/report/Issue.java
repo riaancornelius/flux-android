@@ -1,4 +1,3 @@
-
 package com.riaancornelius.flux.jira.domain.sprint.report;
 
 import org.codehaus.jackson.annotate.JsonAnyGetter;
@@ -314,4 +313,34 @@ public class Issue {
         this.additionalProperties.put(name, value);
     }
 
+    @Override
+    public String toString() {
+        return "Issue{" +
+                "id=" + id +
+                ", key='" + key + '\'' +
+                ", hidden=" + hidden +
+                ", typeName='" + typeName + '\'' +
+                ", typeId='" + typeId + '\'' +
+                ", summary='" + summary + '\'' +
+                ", typeUrl='" + typeUrl + '\'' +
+                ", priorityUrl='" + priorityUrl + '\'' +
+                ", priorityName='" + priorityName + '\'' +
+                ", done=" + done +
+                ", assignee='" + assignee + '\'' +
+                ", assigneeName='" + assigneeName + '\'' +
+                ", avatarUrl='" + avatarUrl + '\'' +
+                ", color='" + color + '\'' +
+                ", epic='" + epic + '\'' +
+                ", columnStatistic=" + columnStatistic +
+                ", estimateStatistic=" + estimateStatistic +
+                ", statusId='" + statusId + '\'' +
+                ", statusName='" + statusName + '\'' +
+                ", statusUrl='" + statusUrl + '\'' +
+                ", status=" + status +
+                ", fixVersions=" + fixVersions +
+                ", projectId=" + projectId +
+                ", linkedPagesCount=" + linkedPagesCount +
+                ", additionalProperties=" + additionalProperties +
+                '}';
+    }
 }

@@ -61,6 +61,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:onClick="onIssueListButtonClick" />
+            <Button
+                    style="?android:buttonBarButtonStyle"
+                    android:id="@+id/puntedIssues"
+                    android:text="..."
+                    android:textAppearance="?android:textAppearanceButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="onIssueListButtonClick" />
         </LinearLayout>
     </RelativeLayout>
 

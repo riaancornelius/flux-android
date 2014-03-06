@@ -1,13 +1,16 @@
 package com.riaancornelius.flux.ui.issue;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+
 import com.riaancornelius.flux.R;
 import com.riaancornelius.flux.jira.domain.sprint.report.Issue;
 import com.riaancornelius.flux.ui.components.TitledFragment;
@@ -41,9 +44,19 @@ public class IssueListFragment extends Fragment implements TitledFragment {
             Log.d("FRAGMENT", "Creating view with issues: " + issues.size());
             TextView titleField = (TextView) view.findViewById(R.id.issue_list_header);
             titleField.setText(title);
-            IssueAdapter issueAdapter = new IssueAdapter(inflater, issues);
+            final IssueAdapter issueAdapter = new IssueAdapter(inflater, issues);
             ListView issueList = (ListView) view.findViewById(R.id.issue_list);
             issueList.setAdapter(issueAdapter);
+            issueList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Intent itemIntent = new Intent(getActivity(), IssueActivity.class);
+                    Object issue = issueAdapter.getItem(position);
+                    itemIntent.putExtra(IssueActivity.INTENT_KEY_ISSUE_ID, ((Issue) issue).getKey());
+                    startActivity(itemIntent);
+                }
+            });
+
             issueAdapter.notifyDataSetChanged();
         }
         return view;

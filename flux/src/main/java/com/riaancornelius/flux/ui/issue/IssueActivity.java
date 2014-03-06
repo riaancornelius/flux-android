@@ -23,7 +23,6 @@ import com.riaancornelius.flux.R;
 import com.riaancornelius.flux.api.ImageSpiceService;
 import com.riaancornelius.flux.jira.api.request.issue.IssueRequest;
 import com.riaancornelius.flux.jira.api.request.issue.UpdateIssueRequest;
-import com.riaancornelius.flux.jira.api.service.JiraJacksonSpringAndroidSpiceService;
 import com.riaancornelius.flux.jira.domain.author.Author;
 import com.riaancornelius.flux.jira.domain.issue.Issue;
 import com.riaancornelius.flux.ui.components.CustomPagerAdapter;
@@ -57,7 +56,7 @@ public class IssueActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_issue);
         Intent intent = getIntent();
-        issueKey = intent.getStringExtra("issueKey");
+        issueKey = intent.getStringExtra(INTENT_KEY_ISSUE_ID);
         if (issueKey == null) {
             finish();
         }

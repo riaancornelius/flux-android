@@ -4,8 +4,6 @@ import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
-import android.app.ProgressDialog;
-import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -13,9 +11,13 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import android.view.*;
-import android.view.inputmethod.InputMethodManager;
+import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.ViewConfiguration;
+import android.view.Window;
 import android.widget.Toast;
+
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.octo.android.robospice.SpiceManager;
@@ -25,10 +27,10 @@ import com.riaancornelius.flux.ui.MainActivity;
 import com.riaancornelius.flux.ui.components.ProgressDialogFragment;
 import com.riaancornelius.flux.ui.issue.IssueActivity;
 import com.riaancornelius.flux.ui.settings.SettingsActivity;
-import roboguice.activity.RoboActivity;
-import roboguice.activity.RoboFragmentActivity;
 
 import java.lang.reflect.Field;
+
+import roboguice.activity.RoboFragmentActivity;
 
 /**
  * Created by riaan.cornelius on 2013/12/22.
@@ -40,6 +42,7 @@ public class BaseActivity extends RoboFragmentActivity {
     public static final String INTENT_KEY_BOARD_ID = "INTENT_BOARD_ID";
     public static final String INTENT_KEY_SPRINT_ID = "INTENT_SPRINT_ID";
     public static final String INTENT_KEY_REQUESTING_ID = "INTENT_REQUESTING_ID";
+    public static final String INTENT_KEY_ISSUE_ID = "INTENT_ISSUE_KEY";
 
     private static final String LOADING_BAR = "loading_bar";
 
@@ -113,7 +116,7 @@ public class BaseActivity extends RoboFragmentActivity {
         Toast toast = Toast.makeText(context, "", Toast.LENGTH_SHORT);
         if (scanResult != null) {
             Intent myIntent = new Intent(this, IssueActivity.class);
-            myIntent.putExtra("issueKey", scanResult.getContents());
+            myIntent.putExtra(INTENT_KEY_ISSUE_ID, scanResult.getContents());
             this.startActivity(myIntent);
         }   else {
             toast.setGravity(Gravity.FILL_HORIZONTAL, 0, 0);

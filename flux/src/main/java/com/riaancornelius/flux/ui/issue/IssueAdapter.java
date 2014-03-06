@@ -1,20 +1,16 @@
 package com.riaancornelius.flux.ui.issue;
 
-import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+
 import com.riaancornelius.flux.R;
 import com.riaancornelius.flux.jira.domain.sprint.report.Issue;
 
-import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.List;
-
 
 /**
  * User: riaan.cornelius
@@ -34,7 +30,7 @@ public class IssueAdapter extends BaseAdapter {
     }
 
     public Object getItem(int position) {
-        return position;
+        return data.get(position);
     }
 
     public long getItemId(int position) {

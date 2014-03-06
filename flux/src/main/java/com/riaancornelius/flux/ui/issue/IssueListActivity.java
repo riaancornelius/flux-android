@@ -1,12 +1,11 @@
 package com.riaancornelius.flux.ui.issue;
 
-import android.app.ActionBar;
-import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
+
 import com.octo.android.robospice.persistence.DurationInMillis;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
@@ -35,11 +34,6 @@ public class IssueListActivity extends BaseActivity implements SpiceCallback {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_issue_list);
         initUIComponents();
-
-//        final ActionBar actionBar = getActionBar();
-
-        // Specify that tabs should be displayed in the action bar.
-//        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
     }
 
     @Override
@@ -51,38 +45,11 @@ public class IssueListActivity extends BaseActivity implements SpiceCallback {
         performRequest(boardId, sprintId);
     }
 
-//    // Create a tab listener that is called when the user changes tabs.
-//    ActionBar.TabListener tabListener = new ActionBar.TabListener() {
-//        public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
-//            // When the tab is selected, switch to the
-//            // corresponding page in the ViewPager.
-//            pager.setCurrentItem(tab.getPosition());
-//        }
-//
-//        public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {
-//            // hide the given tab
-//        }
-//
-//        public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
-//            // probably ignore this event
-//        }
-//    };
-
     private void initUIComponents() {
         pagerAdapter = new CustomPagerAdapter(getSupportFragmentManager());
 
         pager = (ViewPager) findViewById(R.id.issue_list_pager);
         pager.setAdapter(pagerAdapter);
-//
-//        pager.setOnPageChangeListener(
-//                new ViewPager.SimpleOnPageChangeListener() {
-//                    @Override
-//                    public void onPageSelected(int position) {
-//                        // When swiping between pages, select the
-//                        // corresponding tab.
-//                        getActionBar().setSelectedNavigationItem(position);
-//                    }
-//                });
     }
 
     private void performRequest(Long board, long sprintId) {
@@ -118,7 +85,7 @@ public class IssueListActivity extends BaseActivity implements SpiceCallback {
 
     @Override
     public void onRequestFinished() {
-        //To change body of implemented methods use File | Settings | File Templates.
+
     }
 
     private class ListSprintReportRequestListener implements
@@ -129,7 +96,6 @@ public class IssueListActivity extends BaseActivity implements SpiceCallback {
             Toast.makeText(IssueListActivity.this,
                     "Error during request: " + e.getLocalizedMessage(), Toast.LENGTH_LONG)
                     .show();
-            //IssueListActivity.this.setProgressBarIndeterminateVisibility(false);
         }
 
         @Override
@@ -148,11 +114,11 @@ public class IssueListActivity extends BaseActivity implements SpiceCallback {
 
             List<Issue> allIssues = new ArrayList<Issue>();
             List<Issue> puntedIssues = sprintReport.getContents().getPuntedIssues();
-            List<Issue> incompletedIssues = sprintReport.getContents().getIncompletedIssues();
+            List<Issue> incompleteIssues = sprintReport.getContents().getIncompletedIssues();
             List<Issue> completedIssues = sprintReport.getContents().getCompletedIssues();
 
-            if ( incompletedIssues != null && !incompletedIssues.isEmpty()) {
-                allIssues.addAll(incompletedIssues);
+            if ( incompleteIssues != null && !incompleteIssues.isEmpty()) {
+                allIssues.addAll(incompleteIssues);
             }
             if ( completedIssues != null && !completedIssues.isEmpty()) {
                 allIssues.addAll(completedIssues);
@@ -164,31 +130,14 @@ public class IssueListActivity extends BaseActivity implements SpiceCallback {
                 IssueListFragment allIssuesFragment = IssueListFragment.newInstance(allIssues, "All Issues");
                 pagerAdapter.addFragment(IssueListFragment.KEY_ALL_ISSUES, allIssuesFragment);
                 allIssuesIndex = pagerAdapter.getCount()-1;
-//                getActionBar().addTab(getActionBar().newTab()
-//                        .setText("All Issues")
-//                        .setTabListener(tabListener));
-            }
-
-            //int puntedIssuesIndex = -1;
-            if ( puntedIssues != null && !puntedIssues.isEmpty()) {
-                Log.d("IssueList", "adding view with puntedIssues: " + puntedIssues.size());
-                IssueListFragment puntedIssuesFragment = IssueListFragment.newInstance(puntedIssues, "Punted Issues");
-                pagerAdapter.addFragment(IssueListFragment.KEY_PUNTED_ISSUES, puntedIssuesFragment);
-                //puntedIssuesIndex = pagerAdapter.getCount()-1;
-//                getActionBar().addTab(getActionBar().newTab()
-//                        .setText("Punted Issues")
-//                        .setTabListener(tabListener));
             }
 
             int incompleteIssuesIndex = -1;
-            if ( incompletedIssues != null && !incompletedIssues.isEmpty()) {
-                Log.d("IssueList", "adding view with incompletedIssues: " + incompletedIssues.size());
-                IssueListFragment incompletedIssuesFragment = IssueListFragment.newInstance(incompletedIssues, "Open Issues");
-                pagerAdapter.addFragment(IssueListFragment.KEY_PUNTED_ISSUES, incompletedIssuesFragment);
+            if ( incompleteIssues != null && !incompleteIssues.isEmpty()) {
+                Log.d("IssueList", "adding view with incompleteIssues: " + incompleteIssues.size());
+                IssueListFragment incompleteIssuesFragment = IssueListFragment.newInstance(incompleteIssues, "Open Issues");
+                pagerAdapter.addFragment(IssueListFragment.KEY_INCOMPLETE_ISSUES, incompleteIssuesFragment);
                 incompleteIssuesIndex = pagerAdapter.getCount()-1;
-//                getActionBar().addTab(getActionBar().newTab()
-//                        .setText("Open Issues")
-//                        .setTabListener(tabListener));
             }
 
             int completedIssuesIndex = -1;
@@ -197,19 +146,26 @@ public class IssueListActivity extends BaseActivity implements SpiceCallback {
                 IssueListFragment completedIssuesFragment = IssueListFragment.newInstance(completedIssues, "Completed Issues");
                 pagerAdapter.addFragment(IssueListFragment.KEY_COMPLETE_ISSUES, completedIssuesFragment);
                 completedIssuesIndex = pagerAdapter.getCount()-1;
-//                getActionBar().addTab(getActionBar().newTab()
-//                        .setText("Closed Issues")
-//                        .setTabListener(tabListener));
             }
 
-            setSelectedFragment(allIssuesIndex, incompleteIssuesIndex, completedIssuesIndex);
+            int puntedIssuesIndex = -1;
+            if ( puntedIssues != null && !puntedIssues.isEmpty()) {
+                Log.d("IssueList", "adding view with puntedIssues: " + puntedIssues.size());
+                IssueListFragment puntedIssuesFragment = IssueListFragment.newInstance(puntedIssues, "Punted Issues");
+                pagerAdapter.addFragment(IssueListFragment.KEY_PUNTED_ISSUES, puntedIssuesFragment);
+                puntedIssuesIndex = pagerAdapter.getCount()-1;
+            }
+
+            setSelectedFragment(allIssuesIndex, incompleteIssuesIndex,
+                    completedIssuesIndex, puntedIssuesIndex);
 
             Log.d("IssueList", "Done with onRequestSuccess!!");
             IssueListActivity.this.afterRequest();
         }
     }
 
-    private void setSelectedFragment(int allIssuesIndex, int incompleteIssuesIndex, int completedIssuesIndex) {
+    private void setSelectedFragment(int allIssuesIndex, int incompleteIssuesIndex,
+                                     int completedIssuesIndex, int puntedIssuesIndex) {
         switch (requestingId){
             case R.id.uncompletedIssues:
                 pager.setCurrentItem(incompleteIssuesIndex);
@@ -217,8 +173,10 @@ public class IssueListActivity extends BaseActivity implements SpiceCallback {
             case R.id.completedIssues:
                 pager.setCurrentItem(completedIssuesIndex);
                 break;
-            case R.id.totalIssues:
-                // This is the default option
+            case R.id.puntedIssues:
+                pager.setCurrentItem(puntedIssuesIndex);
+                break;
+            case R.id.totalIssues: // This is the default option
             default:
                 pager.setCurrentItem(allIssuesIndex);
         }

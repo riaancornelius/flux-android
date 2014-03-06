@@ -28,6 +28,7 @@ import roboguice.inject.InjectView;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.Properties;
 
 /**
@@ -42,6 +43,7 @@ public class MainActivity extends BaseActivity {
     @InjectView(R.id.totalIssues) private Button sprintSummaryTotal;
     @InjectView(R.id.completedIssues) private Button sprintSummaryCompleted;
     @InjectView(R.id.uncompletedIssues) private Button sprintSummaryUncompleted;
+    @InjectView(R.id.puntedIssues) private Button sprintSummaryPunted;
 
     private long boardId;
     private long currentSprint;
@@ -119,7 +121,7 @@ public class MainActivity extends BaseActivity {
     public void onArViewClick(View view) {
         // TODO: ONLY FOR TESTING
         Intent myIntent = new Intent(this, IssueActivity.class);
-        myIntent.putExtra("issueKey", "FLUX-44");
+        myIntent.putExtra(INTENT_KEY_ISSUE_ID, "FLUX-44");
         this.startActivity(myIntent);
     }
 
@@ -191,6 +193,14 @@ public class MainActivity extends BaseActivity {
                 sprintSummaryTotal.setText(Double.toString(sprintReport.getContents().getAllIssuesEstimateSum().getValue()));
                 sprintSummaryCompleted.setText(Double.toString(sprintReport.getContents().getCompletedIssuesEstimateSum().getValue()));
                 sprintSummaryUncompleted.setText(Double.toString(sprintReport.getContents().getIncompletedIssuesEstimateSum().getValue()));
+                Double puntedTotal = sprintReport.getContents().getPuntedIssuesEstimateSum().getValue();
+                if(puntedTotal == null ||
+                        new BigDecimal(puntedTotal).compareTo(BigDecimal.ZERO) == 0) {
+                    sprintSummaryPunted.setVisibility(View.GONE);
+                } else {
+                    sprintSummaryPunted.setVisibility(View.VISIBLE);
+                    sprintSummaryPunted.setText(Double.toString(puntedTotal));
+                }
             }
             Log.d("TEST", "Found sprints: " + sprintReport.getSprint().getName());
         }
