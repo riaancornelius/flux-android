@@ -21,13 +21,15 @@
     <string name="comments">Comments</string>
     <string name="attachments">Attachments</string>
 
-    <string name="pref_jira_category">Jira Settings</string>
-    <string name="pref_base_url">Jira base URL</string>
+    <string name="pref_jira_category">JIRA Settings</string>
+    <string name="pref_base_url">JIRA base URL</string>
     <string name="pref_base_url_summary">The URL to access your JIRA instance</string>
-    <string name="pref_username">Jira username</string>
-    <string name="pref_username_summary">Your Jira account username</string>
-    <string name="pref_password">Jira password</string>
-    <string name="pref_password_summary">Your Jira account password</string>
+    <string name="pref_username">JIRA username</string>
+    <string name="pref_username_summary">Your JIRA account username</string>
+    <string name="pref_password">JIRA password</string>
+    <string name="pref_password_summary">Your JIRA account password</string>
+    <string name="pref_board">JIRA board</string>
+    <string name="pref_board_summary">The JIRA scrum board to use</string>
     <string name="unassigned">Unassigned</string>
     <string name="enter_value">Please enter a search value</string>
     <string name="issues">Issues</string>
