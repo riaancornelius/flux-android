@@ -1,0 +1,70 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/sprint_details"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_alignParentTop="true">
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:textAppearanceLarge"
+        android:text="..."
+        android:id="@+id/sprintName"
+        android:background="@android:color/transparent"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentTop="true"
+        android:onClick="onViewSprintsClick" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:textAppearanceSmall"
+        android:text="..."
+        android:id="@+id/sprintDates"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/sprintName" />
+
+    <LinearLayout
+        style="?android:buttonBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/sprintDates">
+
+        <Button
+            style="?android:buttonBarButtonStyle"
+            android:id="@+id/totalIssues"
+            android:text="..."
+            android:textAppearance="?android:textAppearanceButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onIssueListButtonClick" />
+
+        <Button
+            style="?android:buttonBarButtonStyle"
+            android:id="@+id/uncompletedIssues"
+            android:text="..."
+            android:textAppearance="?android:textAppearanceButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onIssueListButtonClick" />
+
+        <Button
+            style="?android:buttonBarButtonStyle"
+            android:id="@+id/completedIssues"
+            android:text="..."
+            android:textAppearance="?android:textAppearanceButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onIssueListButtonClick" />
+
+        <Button
+            style="?android:buttonBarButtonStyle"
+            android:id="@+id/puntedIssues"
+            android:text="..."
+            android:textAppearance="?android:textAppearanceButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onIssueListButtonClick" />
+    </LinearLayout>
+</RelativeLayout>

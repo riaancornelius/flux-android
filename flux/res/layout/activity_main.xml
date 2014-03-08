@@ -1,83 +1,16 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin" >
+    android:paddingTop="@dimen/activity_vertical_margin">
 
-    <RelativeLayout
-            android:id="@+id/sprint_details"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentTop="true" >
-        <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:textAppearanceLarge"
-                android:text="..."
-                android:id="@+id/sprintName"
-                android:background="@android:color/transparent"
-                android:layout_centerHorizontal="true"
-                android:layout_alignParentTop="true"
-                android:onClick="onViewSprintsClick" />
-
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:textAppearanceSmall"
-                android:text="..."
-                android:id="@+id/sprintDates"
-                android:layout_centerHorizontal="true"
-                android:layout_below="@id/sprintName" />
-
-        <LinearLayout
-                style="?android:buttonBarStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_below="@id/sprintDates" >
-            <Button
-                    style="?android:buttonBarButtonStyle"
-                    android:id="@+id/totalIssues"
-                    android:text="..."
-                    android:textAppearance="?android:textAppearanceButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:onClick="onIssueListButtonClick" />
-            <Button
-                    style="?android:buttonBarButtonStyle"
-                    android:id="@+id/uncompletedIssues"
-                    android:text="..."
-                    android:textAppearance="?android:textAppearanceButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:onClick="onIssueListButtonClick" />
-            <Button
-                    style="?android:buttonBarButtonStyle"
-                    android:id="@+id/completedIssues"
-                    android:text="..."
-                    android:textAppearance="?android:textAppearanceButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:onClick="onIssueListButtonClick" />
-            <Button
-                    style="?android:buttonBarButtonStyle"
-                    android:id="@+id/puntedIssues"
-                    android:text="..."
-                    android:textAppearance="?android:textAppearanceButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:onClick="onIssueListButtonClick" />
-        </LinearLayout>
-    </RelativeLayout>
-
-    <ImageView
-        android:src="@drawable/burndown"
-        android:contentDescription="Burndown"
-        android:layout_margin="10dp"
+    <android.support.v4.view.ViewPager
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_width="wrap_content"/>
+        android:id="@+id/pager"
+        android:layout_above="@+id/sprint_pager" />
 
     <LinearLayout
         style="?android:buttonBarStyle"
@@ -94,7 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:textAppearanceButton"
-            android:onClick="onScanTicketClick"/>
+            android:onClick="onScanTicketClick" />
 
         <Button
             style="?android:buttonBarButtonStyle"
@@ -103,7 +36,7 @@
             android:textAppearance="?android:textAppearanceButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="onArViewClick"/>
+            android:onClick="onArViewClick" />
     </LinearLayout>
 
-</RelativeLayout>
+</LinearLayout>

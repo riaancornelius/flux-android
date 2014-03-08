@@ -1,9 +1,8 @@
 package com.riaancornelius.flux.jira.api.request.sprint;
 
-import com.octo.android.robospice.SpringAndroidSpiceService;
 import com.riaancornelius.flux.api.JiraSpiceTestService;
 import com.riaancornelius.flux.jira.domain.sprint.Sprints;
-import org.fest.assertions.Assertions;
+
 import org.fest.assertions.Fail;
 import org.junit.After;
 import org.junit.Before;
@@ -28,7 +27,7 @@ public class SprintsRequestTest {
     public void setup() throws Exception {
         System.out.println("SETUP");
 
-        sprintsRequest = new SprintsRequest(1L);
+        sprintsRequest = new SprintsRequest(1L, true);
         JiraSpiceTestService service = new JiraSpiceTestService();
         service.setValuesOn(sprintsRequest);
 

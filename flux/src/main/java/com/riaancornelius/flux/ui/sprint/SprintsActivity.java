@@ -1,12 +1,8 @@
 package com.riaancornelius.flux.ui.sprint;
 
 import android.os.Bundle;
-
 import android.text.TextUtils;
-import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -61,7 +57,7 @@ public class SprintsActivity extends BaseActivity implements SpiceCallback {
     private void performRequest(Long board) {
         beforeRequest();
 
-        SprintsRequest request = new SprintsRequest(board);
+        SprintsRequest request = new SprintsRequest(board, false);
         lastRequestCacheKey = request.createCacheKey();
         spiceManager.execute(request, lastRequestCacheKey,
                 DurationInMillis.ONE_MINUTE, new ListSprintsRequestListener());
