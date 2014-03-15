@@ -35,5 +35,7 @@
     <string name="issues">Issues</string>
     <string name="issue">Issue</string>
     <string name="issues_in_this_sprint">Issues in this sprint</string>
+    <string name="could_not_load_sprint">Could not load sprint details</string>
+    <string name="loading_sprint_info">Loading sprint</string>
 
 </resources>

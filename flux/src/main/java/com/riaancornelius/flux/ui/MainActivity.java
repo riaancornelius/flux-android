@@ -51,7 +51,7 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
 
         sprintPagerAdapter = new CustomPagerAdapter(getSupportFragmentManager());
-        ViewPager pager = (ViewPager) findViewById(R.id.sprint_pager);
+        ViewPager pager = (ViewPager) findViewById(R.id.pager);
         pager.setAdapter(sprintPagerAdapter);
 
         // TODO: Look these values up through the rest API
@@ -158,7 +158,7 @@ public class MainActivity extends BaseActivity {
                 sprintPagerAdapter.addFragment(s.getName(), fragment);
                 //default view is active sprint
                 if (s.getState().equals("ACTIVE")) {
-                    ((ViewPager) findViewById(R.id.sprint_pager)).setCurrentItem(sprints.getSprints().indexOf(s));
+                    ((ViewPager) findViewById(R.id.pager)).setCurrentItem(sprints.getSprints().indexOf(s));
                 }
             }
         }
