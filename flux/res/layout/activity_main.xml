@@ -9,34 +9,18 @@
 
     <android.support.v4.view.ViewPager
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/pager" />
+        android:layout_height="fill_parent"
+        android:id="@+id/pager">
 
-    <LinearLayout
-        style="?android:buttonBarStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"
-        android:layout_margin="10dp">
-
-        <Button
-            style="?android:buttonBarButtonStyle"
-            android:id="@+id/scan_ticket"
-            android:text="@string/scan_a_ticket"
-            android:layout_width="wrap_content"
+        <android.support.v4.view.PagerTitleStrip
+            android:id="@+id/pager_title_strip"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:textAppearanceButton"
-            android:onClick="onScanTicketClick" />
-
-        <Button
-            style="?android:buttonBarButtonStyle"
-            android:id="@+id/ar_view_button"
-            android:text="@string/augmented_view"
-            android:textAppearance="?android:textAppearanceButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="onArViewClick" />
-    </LinearLayout>
+            android:layout_gravity="bottom"
+            android:background="#fff"
+            android:textColor="?android:colorPressedHighlight"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp" />
+    </android.support.v4.view.ViewPager>
 
 </LinearLayout>

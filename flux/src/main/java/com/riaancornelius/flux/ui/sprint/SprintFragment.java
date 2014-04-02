@@ -1,5 +1,6 @@
 package com.riaancornelius.flux.ui.sprint;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -15,11 +16,13 @@ import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.DurationInMillis;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
+import com.riaancornelius.flux.BaseActivity;
 import com.riaancornelius.flux.R;
 import com.riaancornelius.flux.jira.api.request.sprint.SprintReportRequest;
 import com.riaancornelius.flux.jira.domain.sprint.Sprint;
 import com.riaancornelius.flux.jira.domain.sprint.report.SprintReport;
 import com.riaancornelius.flux.ui.components.TitledFragment;
+import com.riaancornelius.flux.ui.issue.IssueListActivity;
 import com.riaancornelius.flux.util.DateUtil;
 
 import java.math.BigDecimal;
@@ -73,6 +76,16 @@ public class SprintFragment extends Fragment implements TitledFragment {
         sprintSummaryPunted = (Button) v.findViewById(R.id.puntedIssues);
         progress = (RelativeLayout) v.findViewById(R.id.progress);
         error = (RelativeLayout) v.findViewById(R.id.error);
+
+        sprintName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent myIntent = new Intent(getActivity(), IssueListActivity.class);
+                myIntent.putExtra(BaseActivity.INTENT_KEY_BOARD_ID, boardId);
+                myIntent.putExtra(BaseActivity.INTENT_KEY_SPRINT_ID, sprint.getId());
+                getActivity().startActivity(myIntent);
+            }
+        });
 
         Log.d(TAG, "View created");
         return v;

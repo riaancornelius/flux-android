@@ -21,7 +21,6 @@ import com.riaancornelius.flux.jira.api.request.sprint.SprintsRequest;
 import com.riaancornelius.flux.jira.domain.sprint.Sprint;
 import com.riaancornelius.flux.jira.domain.sprint.Sprints;
 import com.riaancornelius.flux.ui.components.CustomPagerAdapter;
-import com.riaancornelius.flux.ui.issue.IssueActivity;
 import com.riaancornelius.flux.ui.issue.IssueListActivity;
 import com.riaancornelius.flux.ui.sprint.SprintFragment;
 
@@ -107,24 +106,6 @@ public class MainActivity extends BaseActivity {
         super.beforeRequest();
         SprintsRequest request = new SprintsRequest(boardId, true);
         spiceManager.execute(request, request.createCacheKey(), DurationInMillis.ONE_DAY, new SprintRequestListener());
-    }
-
-    public void onScanTicketClick(View view) {
-        super.scanTicketCode();
-    }
-
-    public void onArViewClick(View view) {
-        // TODO: ONLY FOR TESTING
-        Intent myIntent = new Intent(this, IssueActivity.class);
-        myIntent.putExtra(INTENT_KEY_ISSUE_ID, "FLUX-44");
-        this.startActivity(myIntent);
-    }
-
-    public void onViewSprintsClick(View view) {
-        Intent myIntent = new Intent(MainActivity.this, IssueListActivity.class);
-        myIntent.putExtra(BaseActivity.INTENT_KEY_BOARD_ID, boardId);
-        myIntent.putExtra(BaseActivity.INTENT_KEY_SPRINT_ID, currentSprint);
-        MainActivity.this.startActivity(myIntent);
     }
 
     public void onIssueListButtonClick(View view) {

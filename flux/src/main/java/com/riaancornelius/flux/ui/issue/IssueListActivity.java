@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.octo.android.robospice.persistence.DurationInMillis;
@@ -100,7 +101,6 @@ public class IssueListActivity extends BaseActivity implements SpiceCallback {
 
         @Override
         public void onRequestSuccess(SprintReport sprintReport) {
-
             Log.d("IssueList", "onRequestSuccess. Got: " + sprintReport);
 
             // sprintReport could be null if contentManager.getFromCache(...)
@@ -110,6 +110,9 @@ public class IssueListActivity extends BaseActivity implements SpiceCallback {
                 return;
             }
 
+            TextView title = (TextView) findViewById(R.id.issue_list_screen_header);
+            title.setText(getString(R.string.issues_in_this_sprint) + " (" + sprintReport.getSprint().getName() + ")");
+
             Log.d("IssueList", "sprintReport was not null");
 
             List<Issue> allIssues = new ArrayList<Issue>();
@@ -117,43 +120,43 @@ public class IssueListActivity extends BaseActivity implements SpiceCallback {
             List<Issue> incompleteIssues = sprintReport.getContents().getIncompletedIssues();
             List<Issue> completedIssues = sprintReport.getContents().getCompletedIssues();
 
-            if ( incompleteIssues != null && !incompleteIssues.isEmpty()) {
+            if (incompleteIssues != null && !incompleteIssues.isEmpty()) {
                 allIssues.addAll(incompleteIssues);
             }
-            if ( completedIssues != null && !completedIssues.isEmpty()) {
+            if (completedIssues != null && !completedIssues.isEmpty()) {
                 allIssues.addAll(completedIssues);
             }
 
             int allIssuesIndex = -1;
-            if ( !allIssues.isEmpty()) {
+            if (!allIssues.isEmpty()) {
                 Log.d("IssueList", "adding view with all issues: " + allIssues.size());
                 IssueListFragment allIssuesFragment = IssueListFragment.newInstance(allIssues, "All Issues");
                 pagerAdapter.addFragment(IssueListFragment.KEY_ALL_ISSUES, allIssuesFragment);
-                allIssuesIndex = pagerAdapter.getCount()-1;
+                allIssuesIndex = pagerAdapter.getCount() - 1;
             }
 
             int incompleteIssuesIndex = -1;
-            if ( incompleteIssues != null && !incompleteIssues.isEmpty()) {
+            if (incompleteIssues != null && !incompleteIssues.isEmpty()) {
                 Log.d("IssueList", "adding view with incompleteIssues: " + incompleteIssues.size());
                 IssueListFragment incompleteIssuesFragment = IssueListFragment.newInstance(incompleteIssues, "Open Issues");
                 pagerAdapter.addFragment(IssueListFragment.KEY_INCOMPLETE_ISSUES, incompleteIssuesFragment);
-                incompleteIssuesIndex = pagerAdapter.getCount()-1;
+                incompleteIssuesIndex = pagerAdapter.getCount() - 1;
             }
 
             int completedIssuesIndex = -1;
-            if ( completedIssues != null && !completedIssues.isEmpty()) {
+            if (completedIssues != null && !completedIssues.isEmpty()) {
                 Log.d("IssueList", "adding view with completedIssues: " + completedIssues.size());
                 IssueListFragment completedIssuesFragment = IssueListFragment.newInstance(completedIssues, "Completed Issues");
                 pagerAdapter.addFragment(IssueListFragment.KEY_COMPLETE_ISSUES, completedIssuesFragment);
-                completedIssuesIndex = pagerAdapter.getCount()-1;
+                completedIssuesIndex = pagerAdapter.getCount() - 1;
             }
 
             int puntedIssuesIndex = -1;
-            if ( puntedIssues != null && !puntedIssues.isEmpty()) {
+            if (puntedIssues != null && !puntedIssues.isEmpty()) {
                 Log.d("IssueList", "adding view with puntedIssues: " + puntedIssues.size());
                 IssueListFragment puntedIssuesFragment = IssueListFragment.newInstance(puntedIssues, "Punted Issues");
                 pagerAdapter.addFragment(IssueListFragment.KEY_PUNTED_ISSUES, puntedIssuesFragment);
-                puntedIssuesIndex = pagerAdapter.getCount()-1;
+                puntedIssuesIndex = pagerAdapter.getCount() - 1;
             }
 
             setSelectedFragment(allIssuesIndex, incompleteIssuesIndex,
@@ -166,7 +169,7 @@ public class IssueListActivity extends BaseActivity implements SpiceCallback {
 
     private void setSelectedFragment(int allIssuesIndex, int incompleteIssuesIndex,
                                      int completedIssuesIndex, int puntedIssuesIndex) {
-        switch (requestingId){
+        switch (requestingId) {
             case R.id.uncompletedIssues:
                 pager.setCurrentItem(incompleteIssuesIndex);
                 break;
