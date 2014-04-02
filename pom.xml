@@ -76,11 +76,11 @@
                 <version>${spring.android.jackson.version}</version>
             </dependency>
             <!-- Graphing -->
-            <!--<dependency>-->
-            <!--<groupId>com.androidplot</groupId>-->
-            <!--<artifactId>androidplot-core</artifactId>-->
-            <!--<version>${androidplot-core.version}</version>-->
-            <!--</dependency>-->
+            <dependency>
+                <groupId>com.androidplot</groupId>
+                <artifactId>androidplot-core</artifactId>
+                <version>0.5.2-SNAPSHOT</version>
+            </dependency>
             <!-- Testing -->
             <dependency>
                 <groupId>junit</groupId>
@@ -245,4 +245,16 @@
         </pluginManagement>
     </build>
 
+    <repositories>
+        <repository>
+            <id>sonatype-oss-public</id>
+            <url>https://oss.sonatype.org/content/groups/public/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
 </project>
