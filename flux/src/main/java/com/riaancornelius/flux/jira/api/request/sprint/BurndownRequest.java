@@ -29,4 +29,8 @@ public class BurndownRequest extends JiraSpringAndroidSpiceRequest<Burndown> {
                 boardId, sprintId);
         return url;
     }
+
+    public Object createCacheKey() {
+        return "burndown" + boardId + sprintId;
+    }
 }

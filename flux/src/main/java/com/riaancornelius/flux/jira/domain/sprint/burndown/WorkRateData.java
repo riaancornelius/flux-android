@@ -24,4 +24,12 @@ public class WorkRateData {
     public void setRates(List<Rate> rates) {
         this.rates = rates;
     }
+
+    @Override
+    public String toString() {
+        return "WorkRateData{" +
+                "timezone='" + timezone + '\'' +
+                ", rates=" + rates +
+                '}';
+    }
 }

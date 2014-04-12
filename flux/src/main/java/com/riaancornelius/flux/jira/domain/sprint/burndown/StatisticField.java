@@ -67,4 +67,17 @@ public class StatisticField {
     public void setIsEnabled(Boolean isEnabled) {
         this.isEnabled = isEnabled;
     }
+
+    @Override
+    public String toString() {
+        return "StatisticField{" +
+                "typeId='" + typeId + '\'' +
+                ", fieldId='" + fieldId + '\'' +
+                ", id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", renderer='" + renderer + '\'' +
+                ", isValid=" + isValid +
+                ", isEnabled=" + isEnabled +
+                '}';
+    }
 }

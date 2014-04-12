@@ -37,5 +37,7 @@
     <string name="issues_in_this_sprint">Issues in this sprint</string>
     <string name="could_not_load_sprint">Could not load sprint details</string>
     <string name="loading_sprint_info">Loading sprint</string>
+    <string name="loading_sprint_burndown">Loading sprint burndown</string>
+    <string name="burndown_chart">Burndown Chart</string>
 
 </resources>
