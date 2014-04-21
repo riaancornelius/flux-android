@@ -96,6 +96,7 @@ public class SprintFragment extends Fragment implements TitledFragment {
         });
 
         burndownLoading.setVisibility(View.GONE);
+        burndownChart.setVisibility(View.GONE);
 
         Log.d(TAG, "View created");
         return v;
@@ -142,8 +143,11 @@ public class SprintFragment extends Fragment implements TitledFragment {
                     sprintSummaryPunted.setVisibility(View.VISIBLE);
                     sprintSummaryPunted.setText(Double.toString(puntedTotal));
                 }
-                loadBurndown();
             }
+
+            burndownChart.setStartingPoints(sprintReport.getContents().getAllIssuesEstimateSum().getValue());
+            loadBurndown();
+
             Log.d("TEST", "Found sprints: " + sprintReport.getSprint().getName());
         }
     }
@@ -162,8 +166,9 @@ public class SprintFragment extends Fragment implements TitledFragment {
             Log.d(TAG, "Successfully loaded burndown info: " + burndown);
             burndownLoading.setVisibility(View.GONE);
 
-            burndownChart.setBounds(burndown.getStartTime(), burndown.getEndTime());
+            burndownChart.setTimeBounds(burndown.getStartTime(), burndown.getEndTime());
             burndownChart.setTrendLine(burndown.getWorkRateData().getRates());
+            burndownChart.setVisibility(View.VISIBLE);
         }
     }
 
