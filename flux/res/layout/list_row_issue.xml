@@ -5,22 +5,30 @@
                 android:layout_height="?android:attr/listPreferredItemHeight"
                 android:padding="6dip" >
 
-    <ImageView
+    <RelativeLayout
+        android:id="@+id/issue_assigned_image_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <ImageView
             android:id="@+id/issue_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginRight="6dip"
-            android:contentDescription="@string/issue"
-            android:src="@drawable/ic_launcher" />
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:contentDescription="@string/issue" />
+        <ProgressBar
+            android:id="@+id/loader"
+            android:indeterminate="true"
+            android:layout_centerInParent="true"
+            style="?android:attr/progressBarStyleSmall"
+            android:layout_width="48dp"
+            android:layout_height="48dp" />
+    </RelativeLayout>
 
     <TextView
             android:id="@+id/issue_secondLine_left"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_toRightOf="@id/issue_icon"
+            android:layout_toRightOf="@id/issue_assigned_image_layout"
             android:padding="2dip"
             android:ellipsize="marquee"
             android:singleLine="true"
@@ -60,7 +68,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_alignParentRight="true"
-            android:layout_toRightOf="@id/issue_icon"
+            android:layout_toRightOf="@id/issue_assigned_image_layout"
             android:ellipsize="marquee"
             android:singleLine="true"
             android:text="Issue subject"
