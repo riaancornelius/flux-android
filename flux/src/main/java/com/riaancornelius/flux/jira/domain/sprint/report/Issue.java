@@ -1,7 +1,10 @@
 package com.riaancornelius.flux.jira.domain.sprint.report;
 
+import android.graphics.Bitmap;
+
 import org.codehaus.jackson.annotate.JsonAnyGetter;
 import org.codehaus.jackson.annotate.JsonAnySetter;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonProperty;
 
 import javax.annotation.Generated;
@@ -62,6 +65,8 @@ public class Issue {
     @JsonProperty("linkedPagesCount")
     private Integer linkedPagesCount;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+    @JsonIgnore
+    private Bitmap userAvatar;
 
     @JsonProperty("id")
     public Integer getId() {
@@ -306,6 +311,16 @@ public class Issue {
     @JsonAnyGetter
     public Map<String, Object> getAdditionalProperties() {
         return this.additionalProperties;
+    }
+
+    @JsonIgnore
+    public Bitmap getUserAvatar() {
+        return userAvatar;
+    }
+
+    @JsonIgnore
+    public void setUserAvatar(Bitmap userAvatar) {
+        this.userAvatar = userAvatar;
     }
 
     @JsonAnySetter

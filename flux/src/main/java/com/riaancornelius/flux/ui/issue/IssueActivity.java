@@ -182,7 +182,7 @@ public class IssueActivity extends BaseActivity {
             if (issueReturned.getFields().getAssignee() != null) {
                 String displayName = issueReturned.getFields().getAssignee().getDisplayName();
                 assignedToField.setText(displayName);
-               BitmapRequest imageRequest = new BitmapRequest(issueReturned.getFields().getAssignee().getAvatarUrls().getFortyEightSquareUrl(), new File(getFilesDir(), displayName+".cache"));
+                BitmapRequest imageRequest = new BitmapRequest(issueReturned.getFields().getAssignee().getAvatarUrls().getFortyEightSquareUrl(), new File(getFilesDir(), displayName+".cache"));
                 imageSpiceManager.getFromCacheAndLoadFromNetworkIfExpired(imageRequest, "image"+displayName, DurationInMillis.ONE_WEEK, new ImageListener());
             } else {
                 assignedToField.setText(R.string.unassigned);
