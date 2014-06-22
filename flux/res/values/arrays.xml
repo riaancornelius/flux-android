@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="boardId">
+        <item name="1">Board 1</item>
+        <item name="2">Board 2</item>
+        <item name="3">Board 3</item>
+        <item name="4">Board 4</item>
+        <item name="5">Board 5</item>
+        <item name="5">Board 6</item>
+        <item name="5">Board 7</item>
+        <item name="5">Board 8</item>
+        <item name="5">Board 9</item>
+        <item name="5">Board 10</item>
+    </string-array>
+
+    <string-array name="boardIdValues">
+        <item name="1">1</item>
+        <item name="2">2</item>
+        <item name="3">3</item>
+        <item name="4">4</item>
+        <item name="5">5</item>
+        <item name="5">6</item>
+        <item name="5">7</item>
+        <item name="5">8</item>
+        <item name="5">9</item>
+        <item name="5">10</item>
+    </string-array>
+
+</resources>

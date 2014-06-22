@@ -26,11 +26,13 @@
             android:inputType="textPassword"
             android:defaultValue="" />
 
-        <com.riaancornelius.flux.ui.settings.JiraBoardPreferences
+        <ListPreference
             android:key="pref_key_board_id"
             android:title="@string/pref_board"
             android:summary="@string/pref_board_summary"
-            android:defaultValue="" />
+            android:defaultValue="1"
+            android:entries="@array/boardId"
+            android:entryValues="@array/boardIdValues" />
 
     </PreferenceCategory>
 

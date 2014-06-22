@@ -36,6 +36,7 @@ import java.util.Properties;
  */
 public class MainActivity extends BaseActivity {
 
+    private static final String TAG = "MainActivity";
     private String lastRequestCacheKey;
 
     @InjectView(R.id.sprintName) private TextView sprintName;
@@ -60,7 +61,7 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
 
         // TODO: Look these values up through the rest API
-        boardId = 1L;
+        //boardId = 1L;
         currentSprint = 4L;
 
         // TODO: GET RID OF THIS - ONLY FOR TESTING!!:
@@ -77,6 +78,7 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        boardId = new Long(getJiraSharedPreferences().getString(Settings.JIRA_BOARD_ID_KEY, "1"));
         performSprintReportRequest();
     }
 
@@ -100,6 +102,7 @@ public class MainActivity extends BaseActivity {
             editor.putString(Settings.JIRA_USERNAME_KEY, props.getProperty("username"));
             editor.putString(Settings.JIRA_PASSWORD_KEY, props.getProperty("password"));
             editor.putString(Settings.JIRA_BASE_URL_KEY, props.getProperty("baseUrl"));
+            editor.putString(Settings.JIRA_BOARD_ID_KEY, props.getProperty("boardId"));
             editor.commit();
             Log.d("TEST", "Settings saved");
         } catch (IOException e) {
@@ -175,8 +178,12 @@ public class MainActivity extends BaseActivity {
         public void onRequestFailure(SpiceException e) {
             MainActivity.this.afterRequest();
             Toast.makeText(MainActivity.this,
-                    "Error during request: " + e.getLocalizedMessage(), Toast.LENGTH_LONG)
-                    .show();
+                    "Could not load sprint data - Are you sure your board id is correct?",
+                    Toast.LENGTH_LONG).show();
+            Log.e(TAG, e.getLocalizedMessage(), e);
+//            Toast.makeText(MainActivity.this,
+//                    "Error during request: " + e.getLocalizedMessage(), Toast.LENGTH_LONG)
+//                    .show();
         }
 
         @Override
