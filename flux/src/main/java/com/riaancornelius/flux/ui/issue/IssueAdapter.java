@@ -1,6 +1,5 @@
 package com.riaancornelius.flux.ui.issue;
 
-import android.graphics.Bitmap;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,16 +9,9 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.octo.android.robospice.SpiceManager;
-import com.octo.android.robospice.persistence.DurationInMillis;
-import com.octo.android.robospice.persistence.exception.SpiceException;
-import com.octo.android.robospice.request.listener.RequestListener;
-import com.octo.android.robospice.request.simple.BitmapRequest;
 import com.riaancornelius.flux.R;
-import com.riaancornelius.flux.api.ImageSpiceService;
 import com.riaancornelius.flux.jira.domain.sprint.report.Issue;
 
-import java.io.File;
 import java.util.List;
 
 /**
@@ -27,11 +19,8 @@ import java.util.List;
  */
 public class IssueAdapter extends BaseAdapter {
 
-    private static final String TAG = "IssueAdapter";
     private static LayoutInflater inflater = null;
     private List<Issue> data;
-
-    private SpiceManager imageSpiceManager = new SpiceManager(ImageSpiceService.class);
 
     private ViewHolder holder;
 
@@ -61,7 +50,7 @@ public class IssueAdapter extends BaseAdapter {
             viewHolder.secondLineId = (TextView) vi.findViewById(R.id.issue_secondLine_left);
             viewHolder.secondLineStatus = (TextView) vi.findViewById(R.id.issue_secondLine_right);
             viewHolder.secondLinePoints = (TextView) vi.findViewById(R.id.issue_secondLine_points);
-            viewHolder.assignedToImage = (ImageView) vi.findViewById(R.id.issue_assigned_image);
+            viewHolder.assignedToImage = (ImageView) vi.findViewById(R.id.issue_icon);
             viewHolder.imageProgress = (ProgressBar) vi.findViewById(R.id.loader);
             vi.setTag(viewHolder);
         }
@@ -83,17 +72,10 @@ public class IssueAdapter extends BaseAdapter {
 //        secondLineStatus.getBackground().mutate().setColorFilter(
 //                getColorFromName(issue.getStatus().getStatusCategory().getColorName(), Color.BLACK), PorterDuff.Mode.SRC_ATOP);
 
-        if (issue.getAssignee() != null && issue.getAvatarUrl() != null) {
-            BitmapRequest imageRequest = new BitmapRequest(issue.getAvatarUrl(),
-                    new File(parent.getContext().getFilesDir(), issue.getAssigneeName()+".cache"));
-            imageSpiceManager.getFromCacheAndLoadFromNetworkIfExpired(imageRequest,
-                    "image"+issue.getAssigneeName(), DurationInMillis.ONE_WEEK, new ImageListener());
-        } else {
-            BitmapRequest imageRequest = new BitmapRequest(
-                    "https://secure.gravatar.com/avatar/17f13d9f230593332dba4190eb839037?d=mm&s=48",
-                    new File(parent.getContext().getFilesDir(),"unassigned.cache"));
-            imageSpiceManager.getFromCacheAndLoadFromNetworkIfExpired(imageRequest,
-                    "imageunassigned", DurationInMillis.ALWAYS_RETURNED, new ImageListener());
+        if (issue.getUserAvatar() != null) {
+            holder.assignedToImage.setVisibility(View.VISIBLE);
+            holder.assignedToImage.setImageBitmap(issue.getUserAvatar());
+            holder.imageProgress.setVisibility(View.INVISIBLE);
         }
         return vi;
     }
@@ -112,22 +94,6 @@ public class IssueAdapter extends BaseAdapter {
 //        }
 //        return parsedColor;
 //    }
-
-    private class ImageListener implements RequestListener<Bitmap> {
-        @Override
-        public void onRequestFailure(SpiceException e) {
-            Log.e(TAG, "Could not load image", e);
-            holder.imageProgress.setVisibility(View.INVISIBLE);
-        }
-
-        @Override
-        public void onRequestSuccess(Bitmap bitmap) {
-            Log.d(TAG, "Loaded image");
-            holder.assignedToImage.setVisibility(View.VISIBLE);
-            holder.assignedToImage.setImageBitmap(bitmap);
-            holder.imageProgress.setVisibility(View.INVISIBLE);
-        }
-    }
 
     private class ViewHolder {
         public TextView text;

@@ -70,7 +70,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_below="@id/sprintDates">
+            android:layout_below="@id/sprintDates"
+            android:id="@+id/issueButtons">
 
             <Button
                 style="?android:buttonBarButtonStyle"
@@ -108,6 +109,42 @@
                 android:layout_height="wrap_content"
                 android:onClick="onIssueListButtonClick" />
         </LinearLayout>
+
         <!-- Sprint burndown here -->
+        <RelativeLayout
+            android:padding="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/issueButtons">
+
+            <RelativeLayout
+                android:id="@+id/loadingBurndown"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:background="@color/transparent_white">
+
+                <ProgressBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:id="@+id/progressBarChart" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/loading_sprint_burndown"
+                    android:layout_centerHorizontal="true"
+                    android:gravity="center"
+                    android:layout_below="@+id/progressBarChart" />
+            </RelativeLayout>
+
+            <com.riaancornelius.flux.ui.components.BurndownChart
+                android:id="@+id/sprintBurndown"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </RelativeLayout>
     </RelativeLayout>
+
 </RelativeLayout>
