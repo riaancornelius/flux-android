@@ -33,6 +33,17 @@ import java.util.Properties;
  * Created by riaan.cornelius on 2013/12/22.
  */
 public class MainActivity extends BaseActivity {
+
+    private static final String TAG = "MainActivity";
+    private String lastRequestCacheKey;
+
+    @InjectView(R.id.sprintName) private TextView sprintName;
+    @InjectView(R.id.sprintDates) private TextView sprintDates;
+    @InjectView(R.id.totalIssues) private Button sprintSummaryTotal;
+    @InjectView(R.id.completedIssues) private Button sprintSummaryCompleted;
+    @InjectView(R.id.uncompletedIssues) private Button sprintSummaryUncompleted;
+    @InjectView(R.id.puntedIssues) private Button sprintSummaryPunted;
+
     private long boardId;
     private long currentSprint;
     private CustomPagerAdapter sprintPagerAdapter;
@@ -54,7 +65,7 @@ public class MainActivity extends BaseActivity {
         pager.setAdapter(sprintPagerAdapter);
 
         // TODO: Look these values up through the rest API
-        boardId = 1L;
+        //boardId = 1L;
         currentSprint = 4L;
 
         // TODO: GET RID OF THIS - ONLY FOR TESTING!!:
@@ -72,7 +83,8 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        loadAllSprints();
+        boardId = new Long(getJiraSharedPreferences().getString(Settings.JIRA_BOARD_ID_KEY, "1"));
+        performSprintReportRequest();
     }
 
     // Load settings from external file
@@ -95,6 +107,7 @@ public class MainActivity extends BaseActivity {
             editor.putString(Settings.JIRA_USERNAME_KEY, props.getProperty("username"));
             editor.putString(Settings.JIRA_PASSWORD_KEY, props.getProperty("password"));
             editor.putString(Settings.JIRA_BASE_URL_KEY, props.getProperty("baseUrl"));
+            editor.putString(Settings.JIRA_BOARD_ID_KEY, props.getProperty("boardId"));
             editor.commit();
             Log.d("TEST", "Settings saved");
         } catch (IOException e) {
@@ -102,7 +115,7 @@ public class MainActivity extends BaseActivity {
         }
     }
 
-    private void loadAllSprints() {
+    private void performSprintReportRequest() {
         super.beforeRequest();
         SprintsRequest request = new SprintsRequest(boardId, true);
         spiceManager.execute(request, request.createCacheKey(), DurationInMillis.ONE_DAY, new SprintRequestListener());
@@ -128,7 +141,13 @@ public class MainActivity extends BaseActivity {
         @Override
         public void onRequestFailure(SpiceException e) {
             MainActivity.this.afterRequest();
-            Toast.makeText(MainActivity.this, "Could not load sprints: " + e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+            Toast.makeText(MainActivity.this,
+                    "Could not load sprint data - Are you sure your board id is correct?",
+                    Toast.LENGTH_LONG).show();
+            Log.e(TAG, e.getLocalizedMessage(), e);
+//            Toast.makeText(MainActivity.this,
+//                    "Error during request: " + e.getLocalizedMessage(), Toast.LENGTH_LONG)
+//                    .show();
         }
 
         @Override
