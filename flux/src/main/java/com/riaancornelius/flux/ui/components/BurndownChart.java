@@ -5,7 +5,10 @@ import android.graphics.Color;
 import android.util.AttributeSet;
 import android.util.Log;
 
+import com.androidplot.series.XYSeries;
 import com.androidplot.xy.BoundaryMode;
+import com.androidplot.xy.LineAndPointFormatter;
+import com.androidplot.xy.SimpleXYSeries;
 import com.androidplot.xy.XYPlot;
 import com.riaancornelius.flux.jira.domain.sprint.burndown.Rate;
 
@@ -13,6 +16,9 @@ import java.text.FieldPosition;
 import java.text.Format;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -22,6 +28,8 @@ import java.util.List;
  */
 public class BurndownChart extends XYPlot {
     private Double trendLineStart;
+    private Long startTime;
+    private Long endTime;
 
     public BurndownChart(Context context, String s) {
         super(context, s);
@@ -65,17 +73,58 @@ public class BurndownChart extends XYPlot {
         Log.d("BURNDOWN", startTime + " - " + endTime);
 
         setDomainBoundaries(new Double(startTime), new Double(endTime), BoundaryMode.AUTO);
-
+        this.startTime = startTime;
+        this.endTime = endTime;
     }
 
     public void setStartingPoints(Double value) {
         this.trendLineStart = value;
     }
 
-    public void setTrendLine(List<Rate> rates) {
+    public void setTrendLine(double startValue, List<Rate> rates) {
         //TODO
+        Log.d("TRENDLINE", "Trendline data: " + rates);
 
-        // XYSeries trendLine = new SimpleXYSeries();
+        //make sure rates are ordered
+        Collections.sort(rates, new Comparator<Rate>() {
+            @Override
+            public int compare(Rate lhs, Rate rhs) {
+                return lhs.getStart() < rhs.getStart() ? -1 : (lhs.getStart() == rhs.getStart() ? 0 : 1);
+            }
+        });
+
+        int counter = 0;
+        for (Rate r : rates) {
+            if (r.getRate() > 0) {
+                counter++;
+            }
+        }
+
+        double rateChange = startValue / counter;
+
+        Long[] dates = new Long[rates.size() + 1];
+        Double[] values = new Double[rates.size() + 1];
+        //first entry is
+        dates[0] = rates.get(0).getStart();
+        values[0] = startValue;
+
+        double currentValue = startValue;
+        int currentIndex = 1;
+        for (Rate r : rates) {
+            dates[currentIndex] = r.getEnd();
+            if (r.getRate() > 0) {
+                currentValue -= rateChange;
+            }
+            values[currentIndex] = currentValue;
+            currentIndex++;
+        }
+        Log.d("TRENDLINE", "dates: " + dates);
+        Log.d("TRENDLINE", "values: " + values);
+
+        XYSeries trendLine = new SimpleXYSeries(Arrays.asList(dates), Arrays.asList(values), "Trendline");
+        LineAndPointFormatter formatter = new LineAndPointFormatter(Color.RED, Color.RED, Color.RED);
+
+        this.addSeries(trendLine, formatter);
 
     }
 
@@ -85,8 +134,13 @@ public class BurndownChart extends XYPlot {
         @Override
         public StringBuffer format(Object object, StringBuffer buffer, FieldPosition field) {
             Log.d("BURNDOWN - drawing date ", ((Double) object).toString());
-            Long timeStamp = ((Double) object).longValue();
-            Date date = new Date(timeStamp);
+            Double timeStamp = ((Double) object);
+
+            //start date = -1.0 and end date = 1.0, so first normalise
+            timeStamp = (timeStamp + 1.0) / 2.0;
+            long time = (long) ((endTime - startTime) * timeStamp + startTime);
+            Log.d("BURNDOWN - drawing date", "new time: " + timeStamp);
+            Date date = new Date(time);
             return dateFormat.format(date, buffer, field);
         }
 

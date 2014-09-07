@@ -4,6 +4,8 @@ import com.riaancornelius.flux.jira.domain.sprint.burndown.BurndownChange;
 import com.riaancornelius.flux.jira.domain.sprint.burndown.StatisticField;
 import com.riaancornelius.flux.jira.domain.sprint.burndown.WorkRateData;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -11,6 +13,7 @@ import java.util.Map;
 /**
  * @author Elsabe
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Burndown {
     private long startTime;
     private long endTime;

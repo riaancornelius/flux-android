@@ -110,15 +110,16 @@
                         <versionName>${project.version}</versionName>
                     </manifest>
                 </configuration>
-                <!--<executions>-->
-                <!--<execution>-->
-                <!--<id>startEmulator</id>-->
-                <!--<phase>initialize</phase>-->
-                <!--<goals>-->
-                <!--<goal>emulator-start</goal>-->
-                <!--</goals>-->
-                <!--</execution>-->
-                <!--</executions>-->
+                <executions>
+                    <execution>
+                        <id>deploy</id>
+                        <phase>deploy</phase>
+                        <goals>
+                            <goal>deploy</goal>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
 
             <plugin>
