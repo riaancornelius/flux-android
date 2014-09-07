@@ -214,6 +214,8 @@ public class IssueActivity extends BaseActivity {
         public void onRequestFailure(SpiceException e) {
             Log.d(TAG, "Request failed",e);
             Toast.makeText(IssueActivity.this, e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+
+            IssueActivity.this.afterRequest();
         }
 
         @Override
@@ -230,6 +232,8 @@ public class IssueActivity extends BaseActivity {
             Log.e(TAG, "Could not load image", e);
             imageProgress.setVisibility(View.INVISIBLE);
             Toast.makeText(IssueActivity.this, "Could not load user image", Toast.LENGTH_LONG);
+
+            IssueActivity.this.afterRequest();
         }
 
         @Override
@@ -237,6 +241,8 @@ public class IssueActivity extends BaseActivity {
             assignedToImage.setVisibility(View.VISIBLE);
             assignedToImage.setImageBitmap(bitmap);
             imageProgress.setVisibility(View.INVISIBLE);
+
+            IssueActivity.this.afterRequest();
         }
     }
 
