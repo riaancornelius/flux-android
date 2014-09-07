@@ -105,7 +105,7 @@ public class IssueActivity extends BaseActivity {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        if (requestCode == USER_SELECT) {
+        if (requestCode == USER_SELECT && resultCode != RESULT_CANCELED) {
             //handle it here
             String userKey = intent.getStringExtra(UserSelectActivity.USER_KEY);
             Log.d(TAG, "Reassigning issue " + issueKey + " to user " + userKey);

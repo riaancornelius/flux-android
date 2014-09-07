@@ -9,6 +9,8 @@ import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.octo.android.robospice.persistence.DurationInMillis;
@@ -29,6 +31,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 
+import roboguice.inject.InjectView;
+
 /**
  * Created by riaan.cornelius on 2013/12/22.
  */
@@ -37,12 +41,6 @@ public class MainActivity extends BaseActivity {
     private static final String TAG = "MainActivity";
     private String lastRequestCacheKey;
 
-    @InjectView(R.id.sprintName) private TextView sprintName;
-    @InjectView(R.id.sprintDates) private TextView sprintDates;
-    @InjectView(R.id.totalIssues) private Button sprintSummaryTotal;
-    @InjectView(R.id.completedIssues) private Button sprintSummaryCompleted;
-    @InjectView(R.id.uncompletedIssues) private Button sprintSummaryUncompleted;
-    @InjectView(R.id.puntedIssues) private Button sprintSummaryPunted;
 
     private long boardId;
     private long currentSprint;

@@ -1,25 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	
-	<parent>
-		<groupId>com.riaancornelius.flux</groupId>
-		<artifactId>flux-parent</artifactId>
-		<version>1.0-SNAPSHOT</version>
-	</parent>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-	<artifactId>flux</artifactId>
-	<version>1.0-SNAPSHOT</version>
-	<packaging>apk</packaging>
-	<name>Flux - Application</name>
-<!--
-    <properties>
-        <android.avd.name>Android4</android.avd.name>
-        <android.platform>16</android.platform>
-    </properties>-->
+    <parent>
+        <groupId>com.riaancornelius.flux</groupId>
+        <artifactId>flux-parent</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
 
-	<dependencies>
+    <artifactId>flux</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>apk</packaging>
+    <name>Flux - Application</name>
+    <!--
+        <properties>
+            <android.avd.name>Android4</android.avd.name>
+            <android.platform>16</android.platform>
+        </properties>-->
+
+    <dependencies>
         <!--main-->
         <dependency>
             <groupId>junit</groupId>
@@ -68,10 +69,10 @@
             <artifactId>jackson-mapper-asl</artifactId>
         </dependency>
         <!-- Graphing -->
-        <!--<dependency>-->
-            <!--<groupId>com.androidplot</groupId>-->
-            <!--<artifactId>androidplot-core</artifactId>-->
-        <!--</dependency>-->
+        <dependency>
+            <groupId>com.androidplot</groupId>
+            <artifactId>androidplot-core</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.roboguice</groupId>
             <artifactId>roboguice</artifactId>

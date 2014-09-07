@@ -68,7 +68,7 @@ public class BaseActivity extends RoboFragmentActivity {
             //@TODO
         }
         ActionBar actionBar = getActionBar();
-        actionBar.setSubtitle("Pre-Alpha test version");
+        actionBar.setSubtitle("Integration test");
         actionBar.setTitle("Project Flux");
         actionBar.setDisplayHomeAsUpEnabled(true);
         try {
