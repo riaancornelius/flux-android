@@ -139,20 +139,18 @@ public class MainActivity extends BaseActivity {
                     "Could not load sprint data - Are you sure your board id is correct?",
                     Toast.LENGTH_LONG).show();
             Log.e(TAG, e.getLocalizedMessage(), e);
-//            Toast.makeText(MainActivity.this,
-//                    "Error during request: " + e.getLocalizedMessage(), Toast.LENGTH_LONG)
-//                    .show();
         }
 
         @Override
         public void onRequestSuccess(Sprints sprints) {
             MainActivity.this.afterRequest();
-            for (Sprint s : sprints.getSprints()) {
-                SprintFragment fragment = new SprintFragment(s, boardId, spiceManager);
-                sprintPagerAdapter.addFragment(s.getName(), fragment);
+            for (Sprint sprint : sprints.getSprints()) {
+                SprintFragment fragment = new SprintFragment(sprint, boardId, spiceManager);
+                sprintPagerAdapter.addFragment(sprint.getName(), fragment);
                 //default view is active sprint
-                if (s.getState().equals("ACTIVE")) {
-                    ((ViewPager) findViewById(R.id.pager)).setCurrentItem(sprints.getSprints().indexOf(s));
+                if (sprint.getState().equals("ACTIVE")) {
+                    currentSprint = sprint.getId();
+                    ((ViewPager) findViewById(R.id.pager)).setCurrentItem(sprints.getSprints().indexOf(sprint));
                 }
             }
         }
