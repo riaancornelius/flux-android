@@ -26,13 +26,12 @@
             android:inputType="textPassword"
             android:defaultValue="" />
 
-        <ListPreference
+        <EditTextPreference
             android:key="pref_key_board_id"
             android:title="@string/pref_board"
             android:summary="@string/pref_board_summary"
             android:defaultValue="1"
-            android:entries="@array/boardId"
-            android:entryValues="@array/boardIdValues" />
+            android:inputType="numberDecimal" />
 
     </PreferenceCategory>
 
