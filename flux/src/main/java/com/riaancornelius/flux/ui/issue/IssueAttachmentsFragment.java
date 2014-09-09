@@ -21,11 +21,17 @@ public class IssueAttachmentsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_issue_attachments, container, false);
+        ListView attList = (ListView) view.findViewById(R.id.issue_attachment_list);
+        View noAttachments = view.findViewById(R.id.issue_attachments_empty_text);
         if (attachments != null) {
+            attList.setVisibility(View.VISIBLE);
+            noAttachments.setVisibility(View.GONE);
             AttachmentsAdapter adapter = new AttachmentsAdapter(inflater, attachments);
-            ListView attList = (ListView) view.findViewById(R.id.issue_attachment_list);
             attList.setAdapter(adapter);
             adapter.notifyDataSetChanged();
+        } else {
+            attList.setVisibility(View.GONE);
+            noAttachments.setVisibility(View.VISIBLE);
         }
         return view;
     }

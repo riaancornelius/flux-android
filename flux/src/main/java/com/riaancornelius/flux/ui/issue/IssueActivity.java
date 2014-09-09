@@ -34,6 +34,7 @@ import java.io.File;
  */
 public class IssueActivity extends BaseActivity {
 
+    private static final String DESCRIPTION_KEY = "description";
     private static final String COMMENTS_KEY = "comments";
     private static final String ATTACHMENTS_KEY = "attachments";
     private static final int USER_SELECT = 1;
@@ -189,20 +190,28 @@ public class IssueActivity extends BaseActivity {
                 BitmapRequest imageRequest = new BitmapRequest("https://secure.gravatar.com/avatar/17f13d9f230593332dba4190eb839037?d=mm&s=48", new File(getFilesDir(),"unassigned.cache"));
                 imageSpiceManager.getFromCacheAndLoadFromNetworkIfExpired(imageRequest, "imageunassigned", DurationInMillis.ALWAYS_RETURNED, new ImageListener());
             }
-            descriptionField.setText(issueReturned.getFields().getDescription());
 
+            IssueDescriptionFragment issueDescriptionFragment = new IssueDescriptionFragment();
+            issueDescriptionFragment.setDescription(issueReturned.getFields().getDescription());
+            pagerAdapter.addFragment(DESCRIPTION_KEY, issueDescriptionFragment);
+
+            IssueCommentsFragment commentsFragment = new IssueCommentsFragment();
             if (!(issueReturned.getFields().getCommentList() == null) &&
                     !issueReturned.getFields().getCommentList().getComments().isEmpty()) {
-                IssueCommentsFragment commentsFragment = new IssueCommentsFragment();
                 commentsFragment.setComments(issueReturned.getFields().getCommentList());
-                pagerAdapter.addFragment(COMMENTS_KEY, commentsFragment);
+            } else {
+                commentsFragment.setComments(null);
             }
+            pagerAdapter.addFragment(COMMENTS_KEY, commentsFragment);
 
-            if (issueReturned.getFields().getAttachmentList() != null && !issueReturned.getFields().getAttachmentList().isEmpty()) {
-                IssueAttachmentsFragment attachmentsFragment = new IssueAttachmentsFragment();
+            IssueAttachmentsFragment attachmentsFragment = new IssueAttachmentsFragment();
+            if (issueReturned.getFields().getAttachmentList() != null &&
+                    !issueReturned.getFields().getAttachmentList().isEmpty()) {
                 attachmentsFragment.setAttachments(issueReturned.getFields().getAttachmentList());
-                pagerAdapter.addFragment(ATTACHMENTS_KEY, attachmentsFragment);
+            } else {
+                attachmentsFragment.setAttachments(null);
             }
+            pagerAdapter.addFragment(ATTACHMENTS_KEY, attachmentsFragment);
 
             IssueActivity.this.afterRequest();
         }

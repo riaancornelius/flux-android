@@ -2,4 +2,5 @@
 <resources>
     <color name="transparent_white">#CCCC</color>
     <color name="light_gray">#DDD</color>
+    <color name="no_items_found">#999</color>
 </resources>
