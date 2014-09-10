@@ -3,12 +3,12 @@ package com.riaancornelius.flux.ui.issue;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,19 +24,19 @@ import com.riaancornelius.flux.api.ImageSpiceService;
 import com.riaancornelius.flux.jira.api.request.issue.IssueRequest;
 import com.riaancornelius.flux.jira.api.request.issue.UpdateIssueRequest;
 import com.riaancornelius.flux.jira.domain.author.Author;
+import com.riaancornelius.flux.jira.domain.issue.Attachment;
+import com.riaancornelius.flux.jira.domain.issue.Comments;
 import com.riaancornelius.flux.jira.domain.issue.Issue;
-import com.riaancornelius.flux.ui.components.CustomPagerAdapter;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * User: riaan.cornelius
  */
 public class IssueActivity extends BaseActivity {
 
-    private static final String DESCRIPTION_KEY = "description";
-    private static final String COMMENTS_KEY = "comments";
-    private static final String ATTACHMENTS_KEY = "attachments";
     private static final int USER_SELECT = 1;
     private static final String TAG = "IssueActivity";
     private String issueKey;
@@ -46,9 +46,7 @@ public class IssueActivity extends BaseActivity {
     private TextView assignedToField;
     private ImageView assignedToImage;
     private ProgressBar imageProgress;
-    private TextView descriptionField;
 
-    private CustomPagerAdapter pagerAdapter;
     private Issue issue;
 
     private SpiceManager imageSpiceManager = new SpiceManager(ImageSpiceService.class);
@@ -61,7 +59,6 @@ public class IssueActivity extends BaseActivity {
         if (issueKey == null) {
             finish();
         }
-        pagerAdapter = new CustomPagerAdapter(getSupportFragmentManager());
         initUIComponents();
     }
 
@@ -87,13 +84,9 @@ public class IssueActivity extends BaseActivity {
         assignedToField = (TextView) findViewById(R.id.issue_assigned_to);
         assignedToImage = (ImageView) findViewById(R.id.issue_assigned_image);
         imageProgress = (ProgressBar) findViewById(R.id.loader);
-        descriptionField = (TextView) findViewById(R.id.issue_description);
 
         assignedToImage.setVisibility(View.INVISIBLE);
         imageProgress.setVisibility(View.VISIBLE);
-
-        ViewPager pager = (ViewPager) findViewById(R.id.pager);
-        pager.setAdapter(pagerAdapter);
 
         assignedToFields.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -191,29 +184,72 @@ public class IssueActivity extends BaseActivity {
                 imageSpiceManager.getFromCacheAndLoadFromNetworkIfExpired(imageRequest, "imageunassigned", DurationInMillis.ALWAYS_RETURNED, new ImageListener());
             }
 
-            IssueDescriptionFragment issueDescriptionFragment = new IssueDescriptionFragment();
-            issueDescriptionFragment.setDescription(issueReturned.getFields().getDescription());
-            pagerAdapter.addFragment(DESCRIPTION_KEY, issueDescriptionFragment);
+            setDescription(issueReturned.getFields().getDescription());
 
-            IssueCommentsFragment commentsFragment = new IssueCommentsFragment();
             if (!(issueReturned.getFields().getCommentList() == null) &&
                     !issueReturned.getFields().getCommentList().getComments().isEmpty()) {
-                commentsFragment.setComments(issueReturned.getFields().getCommentList());
+                setComments(issueReturned.getFields().getCommentList());
             } else {
-                commentsFragment.setComments(null);
+                setComments(null);
             }
-            pagerAdapter.addFragment(COMMENTS_KEY, commentsFragment);
 
-            IssueAttachmentsFragment attachmentsFragment = new IssueAttachmentsFragment();
             if (issueReturned.getFields().getAttachmentList() != null &&
                     !issueReturned.getFields().getAttachmentList().isEmpty()) {
-                attachmentsFragment.setAttachments(issueReturned.getFields().getAttachmentList());
+                setAttachments(issueReturned.getFields().getAttachmentList());
             } else {
-                attachmentsFragment.setAttachments(null);
+                setAttachments(null);
             }
-            pagerAdapter.addFragment(ATTACHMENTS_KEY, attachmentsFragment);
 
             IssueActivity.this.afterRequest();
+        }
+    }
+
+    private void setDescription(String description) {
+        TextView descriptionText = (TextView) findViewById(R.id.issue_description);
+        View noDescription = findViewById(R.id.issue_description_empty_text);
+        if (description != null && !description.isEmpty()) {
+            descriptionText.setText(description);
+            descriptionText.setVisibility(View.VISIBLE);
+            noDescription.setVisibility(View.GONE);
+        } else {
+            descriptionText.setVisibility(View.GONE);
+            noDescription.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void setComments(Comments commentList) {
+        LinearLayout comments = (LinearLayout) findViewById(R.id.issue_comments_list);
+        View noComments = findViewById(R.id.issue_comments_empty_text);
+        if (commentList != null) {
+            comments.setVisibility(View.VISIBLE);
+            noComments.setVisibility(View.GONE);
+            CommentAdapter commentsAdapter = new CommentAdapter(getLayoutInflater(), commentList);
+            final int adapterCount = commentsAdapter.getCount();
+            for (int i = 0; i < adapterCount; i++) {
+                View item = commentsAdapter.getView(i, null, null);
+                comments.addView(item);
+            }
+        } else {
+            comments.setVisibility(View.GONE);
+            noComments.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void setAttachments(ArrayList<Attachment> attachments) {
+        LinearLayout attList = (LinearLayout) findViewById(R.id.issue_attachment_list);
+        View noAttachments = findViewById(R.id.issue_attachments_empty_text);
+        if (attachments != null) {
+            attList.setVisibility(View.VISIBLE);
+            noAttachments.setVisibility(View.GONE);
+            AttachmentsAdapter adapter = new AttachmentsAdapter(getLayoutInflater(), attachments);
+            final int adapterCount = adapter.getCount();
+            for (int i = 0; i < adapterCount; i++) {
+                View item = adapter.getView(i, null, null);
+                attList.addView(item);
+            }
+        } else {
+            attList.setVisibility(View.GONE);
+            noAttachments.setVisibility(View.VISIBLE);
         }
     }
 

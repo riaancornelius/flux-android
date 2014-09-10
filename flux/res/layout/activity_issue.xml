@@ -7,39 +7,39 @@
     android:orientation="vertical">
 
     <LinearLayout
+        android:id="@+id/issue_header"
         style="?android:buttonBarStyle"
-        android:layout_alignParentTop="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
         android:layout_centerVertical="true"
-        android:padding="8dip"
-        android:id="@+id/issue_header">
+        android:padding="8dip">
 
         <ImageButton
             android:id="@+id/issue_status"
-            android:contentDescription="@string/issue_status"
             style="?android:borderlessButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:contentDescription="@string/issue_status"
             android:padding="8dip" />
 
         <TextView
-            android:text="@string/loading"
             android:id="@+id/issue_key"
-            android:textAppearance="?android:textAppearanceLarge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:onClick="onViewSprintsClick"
             android:padding="8dip"
-            android:onClick="onViewSprintsClick" />
+            android:text="@string/loading"
+            android:textAppearance="?android:textAppearanceLarge" />
     </LinearLayout>
 
     <TextView
+        android:id="@+id/issue_summary"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:textAppearanceMedium"
+        android:layout_below="@id/issue_header"
         android:text="@string/loading"
-        android:id="@+id/issue_summary"
-        android:layout_below="@id/issue_header" />
+        android:textAppearance="?android:textAppearanceMedium" />
 
     <LinearLayout
         android:id="@+id/user_fields"
@@ -50,49 +50,150 @@
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
+
             <ImageView
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:id="@+id/issue_assigned_image" />
-            <ProgressBar
-                android:id="@+id/loader"
-                android:indeterminate="true"
-                android:layout_centerInParent="true"
-                style="?android:attr/progressBarStyleSmall"
+                android:id="@+id/issue_assigned_image"
                 android:layout_width="48dp"
                 android:layout_height="48dp" />
+
+            <ProgressBar
+                android:id="@+id/loader"
+                style="?android:attr/progressBarStyleSmall"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_centerInParent="true"
+                android:indeterminate="true" />
         </RelativeLayout>
 
         <TextView
             android:id="@+id/issue_assigned_to"
-            android:text="@string/assigned_to"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dip"
-            android:textAppearance="?android:textAppearanceSmall"
             android:layout_gravity="center_vertical"
-            android:gravity="center_vertical"/>
+            android:layout_marginLeft="10dip"
+            android:gravity="center_vertical"
+            android:text="@string/assigned_to"
+            android:textAppearance="?android:textAppearanceSmall" />
     </LinearLayout>
 
     <ScrollView
         android:layout_width="fill_parent"
-        android:layout_height="60dp"
-        android:id="@+id/issue_description_container"
+        android:layout_height="wrap_content"
         android:layout_below="@id/user_fields"
-        android:layout_margin="10dp">
+        android:padding="8dp">
 
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:textAppearanceSmall"
-            android:text="@string/loading"
-            android:id="@+id/issue_description" />
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/issue_description_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/user_fields"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/issue_description_header_text"
+                    style="?android:listSeparatorTextViewStyle"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="8dip"
+                    android:text="@string/description"
+                    android:textAppearance="?android:textAppearanceMedium" />
+
+                <TextView
+                    android:id="@+id/issue_description_empty_text"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="8dip"
+                    android:text="@string/no_description"
+                    android:textAppearance="?android:textAppearanceSearchResultTitle"
+                    android:textColor="@color/no_items_found" />
+
+                <TextView
+                    android:id="@+id/issue_description"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="left|top"
+                    android:padding="8dip"
+                    android:text="@string/ellipse"
+                    android:textAppearance="?android:textAppearance" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/issue_comments_layout"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/issue_description_layout" >
+
+                <TextView
+                    android:id="@+id/issue_comments_list_header"
+                    android:text="@string/comments"
+                    android:textAppearance="?android:textAppearanceMedium"
+                    style="?android:listSeparatorTextViewStyle"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="8dip" />
+
+                <TextView
+                    android:id="@+id/issue_comments_empty_text"
+                    android:text="@string/no_comments"
+                    android:textAppearance="?android:textAppearanceSearchResultTitle"
+                    android:textColor="@color/no_items_found"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="8dip" />
+
+                <LinearLayout
+                    android:id="@+id/issue_comments_list"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/issue_attachments_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/issue_attachments_layout"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/issue_attachments_list_header"
+                    style="?android:listSeparatorTextViewStyle"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="8dip"
+                    android:text="@string/attachments"
+                    android:textAppearance="?android:textAppearanceMedium" />
+
+                <TextView
+                    android:id="@+id/issue_attachments_empty_text"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="8dip"
+                    android:text="@string/no_attachments"
+                    android:textAppearance="?android:textAppearanceSearchResultTitle"
+                    android:textColor="@color/no_items_found" />
+
+                <LinearLayout
+                    android:id="@+id/issue_attachment_list"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" />
+
+            </LinearLayout>
+        </LinearLayout>
+
     </ScrollView>
 
-    <android.support.v4.view.ViewPager
-        android:layout_width="match_parent"
-        android:layout_height="fill_parent"
-        android:id="@+id/pager"
-        android:layout_below="@id/issue_description_container"></android.support.v4.view.ViewPager>
 </RelativeLayout>
 

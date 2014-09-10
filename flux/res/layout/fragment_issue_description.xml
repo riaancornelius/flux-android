@@ -26,7 +26,7 @@
     <TextView
         android:id="@+id/issue_description"
         android:text="@string/ellipse"
-        android:textAppearance="?android:itemTextAppearance"
+        android:textAppearance="?android:textAppearance"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="left|top"
