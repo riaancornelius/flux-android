@@ -44,5 +44,9 @@
     <string name="no_comments">There are no comments</string>
     <string name="ellipse">...</string>
     <string name="no_attachments">There are no attachments</string>
+    <string name="action_add_comment">Add a comment</string>
+    <string name="action_edit">Edit</string>
+    <string name="action_assign_user">Assign to user</string>
+    <string name="action_refresh">Refresh</string>
 
 </resources>

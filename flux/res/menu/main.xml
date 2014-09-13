@@ -2,8 +2,8 @@
 
     <item
         android:id="@+id/action_scan_ticket"
-        android:orderInCategory="10"
-        android:showAsAction="always"
+        android:orderInCategory="95"
+        android:showAsAction="ifRoom"
         android:icon="@drawable/ic_qrcode"
         android:title="Scan a ticket" />
 

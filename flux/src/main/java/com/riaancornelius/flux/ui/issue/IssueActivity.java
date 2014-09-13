@@ -5,10 +5,13 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,7 +33,6 @@ import com.riaancornelius.flux.jira.domain.issue.Issue;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * User: riaan.cornelius
@@ -47,12 +49,15 @@ public class IssueActivity extends BaseActivity {
     private ImageView assignedToImage;
     private ProgressBar imageProgress;
 
+    private String lastRequestCacheKey;
+
     private Issue issue;
 
     private SpiceManager imageSpiceManager = new SpiceManager(ImageSpiceService.class);
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d(TAG, "onCreate");
         setContentView(R.layout.activity_issue);
         Intent intent = getIntent();
         issueKey = intent.getStringExtra(INTENT_KEY_ISSUE_ID);
@@ -65,6 +70,7 @@ public class IssueActivity extends BaseActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        Log.d(TAG, "onStart");
         performRequest(issueKey);
         imageSpiceManager.start(this);
     }
@@ -75,7 +81,40 @@ public class IssueActivity extends BaseActivity {
         imageSpiceManager.shouldStop();
     }
 
-    private String lastRequestCacheKey;
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu items for use in the action bar
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.issue, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Toast toast = Toast.makeText(IssueActivity.this, "", Toast.LENGTH_SHORT);
+        toast.setGravity(Gravity.FILL_HORIZONTAL, 0, 0);
+        switch (item.getItemId()) {
+            case R.id.action_edit_issue:
+                toast.setText("Edit issue");
+                toast.show();
+                break;
+            case R.id.action_add_comment:
+                toast.setText("Add a comment");
+                toast.show();
+                break;
+            case R.id.action_assign_user:
+                Intent intent = new Intent(IssueActivity.this, UserSelectActivity.class);
+                startActivityForResult(intent, USER_SELECT);
+                break;
+            case R.id.action_refresh:
+                clearIssueFromCache(issueKey);
+                performRequest(issueKey);
+                break;
+            default:
+                super.onOptionsItemSelected(item);
+        }
+        return true;
+    }
 
     private void initUIComponents() {
         keyField = (TextView) findViewById(R.id.issue_key);
@@ -103,7 +142,6 @@ public class IssueActivity extends BaseActivity {
             //handle it here
             String userKey = intent.getStringExtra(UserSelectActivity.USER_KEY);
             Log.d(TAG, "Reassigning issue " + issueKey + " to user " + userKey);
-            //TODO update issue with new user (see UpdateIssueRequest)
             if (issue != null) {
                 if (issue.getFields().getAssignee() == null) {
                     issue.getFields().setAssignee(new Author());
@@ -111,16 +149,24 @@ public class IssueActivity extends BaseActivity {
                 issue.getFields().getAssignee().setKey(userKey);
                 UpdateIssueRequest request = new UpdateIssueRequest(issue);
                 spiceManager.getFromCacheAndLoadFromNetworkIfExpired(request, "update",
-                        DurationInMillis.ONE_WEEK, new IssueUpdateListener());
+                        DurationInMillis.ALWAYS_RETURNED, new IssueUpdateListener());
             }
         } else {
             super.onActivityResult(requestCode, resultCode, intent);
         }
     }
 
-    private void performRequest(String IssueKey) {
+    private void clearIssueFromCache(String issueKey) {
+        Log.d(TAG, "Removing Issue from cache: " + issueKey);
+        IssueRequest request = new IssueRequest(issueKey);
+        String cacheKey = request.createCacheKey();
+        spiceManager.removeDataFromCache(Issue.class, cacheKey);
+    }
+
+    private void performRequest(String issueKey) {
+        Log.d(TAG, "Reloading data for issue: " + issueKey);
         beforeRequest();
-        IssueRequest request = new IssueRequest(IssueKey);
+        IssueRequest request = new IssueRequest(issueKey);
         lastRequestCacheKey = request.createCacheKey();
         spiceManager.execute(request, lastRequestCacheKey,
                 DurationInMillis.ONE_WEEK,
@@ -169,6 +215,8 @@ public class IssueActivity extends BaseActivity {
             }
 
             issue = issueReturned;
+
+            Log.d(TAG, "Issue data returned for " + issue.getKey());
 
             keyField.setText(issueReturned.getKey());
             summaryField.setText(issueReturned.getFields().getSummary());
@@ -219,6 +267,7 @@ public class IssueActivity extends BaseActivity {
 
     private void setComments(Comments commentList) {
         LinearLayout comments = (LinearLayout) findViewById(R.id.issue_comments_list);
+        comments.removeAllViewsInLayout();
         View noComments = findViewById(R.id.issue_comments_empty_text);
         if (commentList != null) {
             comments.setVisibility(View.VISIBLE);
@@ -237,6 +286,7 @@ public class IssueActivity extends BaseActivity {
 
     private void setAttachments(ArrayList<Attachment> attachments) {
         LinearLayout attList = (LinearLayout) findViewById(R.id.issue_attachment_list);
+        attList.removeAllViewsInLayout();
         View noAttachments = findViewById(R.id.issue_attachments_empty_text);
         if (attachments != null) {
             attList.setVisibility(View.VISIBLE);
@@ -259,7 +309,6 @@ public class IssueActivity extends BaseActivity {
         public void onRequestFailure(SpiceException e) {
             Log.d(TAG, "Request failed",e);
             Toast.makeText(IssueActivity.this, e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
-
             IssueActivity.this.afterRequest();
         }
 
@@ -267,6 +316,7 @@ public class IssueActivity extends BaseActivity {
         public void onRequestSuccess(String s) {
             Log.d(TAG, "Success: " + s);
             Toast.makeText(IssueActivity.this, "Success!", Toast.LENGTH_LONG).show();
+            clearIssueFromCache(issueKey);
             performRequest(issueKey);
         }
     }
