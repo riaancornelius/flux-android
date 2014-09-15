@@ -1,5 +1,7 @@
 package com.riaancornelius.flux.ui.issue;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -28,10 +30,12 @@ import com.riaancornelius.flux.jira.api.request.issue.IssueRequest;
 import com.riaancornelius.flux.jira.api.request.issue.UpdateIssueRequest;
 import com.riaancornelius.flux.jira.domain.author.Author;
 import com.riaancornelius.flux.jira.domain.issue.Attachment;
+import com.riaancornelius.flux.jira.domain.issue.Comment;
 import com.riaancornelius.flux.jira.domain.issue.Comments;
 import com.riaancornelius.flux.jira.domain.issue.Issue;
 
 import java.io.File;
+import java.text.DateFormat;
 import java.util.ArrayList;
 
 /**
@@ -217,6 +221,29 @@ public class IssueActivity extends BaseActivity {
             for (int i = 0; i < adapterCount; i++) {
                 View item = commentsAdapter.getView(i, null, null);
                 comments.addView(item);
+                item.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Comment comment = (Comment) v.getTag(CommentAdapter.COMMENT_ITEM_TAG);
+                        new AlertDialog.Builder(IssueActivity.this)
+                                .setMessage(comment.getBody())
+                                .setTitle(comment.getAuthor().getDisplayName() +
+                                        " ("+ DateFormat.getDateInstance().format(comment.getCreated()) +")")
+                                .setNegativeButton(R.string.close, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                    }
+                                })
+                                .setPositiveButton(R.string.action_add_comment, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        Toast.makeText(IssueActivity.this, "Add a comment not implemented yet", Toast.LENGTH_LONG).show();
+                                    }
+                                })
+                                .create().show();
+                    }
+                });
             }
         } else {
             comments.setVisibility(View.GONE);

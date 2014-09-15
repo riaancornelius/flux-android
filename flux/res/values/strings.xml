@@ -48,5 +48,6 @@
     <string name="action_edit">Edit</string>
     <string name="action_assign_user">Assign to user</string>
     <string name="action_refresh">Refresh</string>
+    <string name="close">Close</string>
 
 </resources>
