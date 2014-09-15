@@ -12,7 +12,8 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         android:layout_alignTop="@+id/queryValue"
-        android:layout_alignBottom="@+id/queryValue"/>
+        android:layout_alignBottom="@+id/queryValue"
+        android:focusableInTouchMode="true" />
 
     <EditText
         android:layout_width="fill_parent"

@@ -2,6 +2,7 @@ package com.riaancornelius.flux.ui.issue;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,6 +14,7 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.DurationInMillis;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
@@ -73,11 +75,37 @@ public class UserSelectActivity extends BaseActivity {
         });
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (adapter.getCount()==0) {
+            loadAuthorsFromCache();
+        }
+    }
+
+    private void loadAuthorsFromCache() {
+        AsyncTask<Void, String, AuthorList> authorCacheLoader = new AsyncTask<Void, String, AuthorList>() {
+            @Override
+            protected AuthorList doInBackground(Void... params) {
+                return AuthorList.getFromCache(spiceManager);
+            }
+
+            @Override
+            protected void onPostExecute(AuthorList authors) {
+                Log.d(TAG, "Got cached authors - adding them to the adapter");
+                adapter.setAuthors(authors);
+            }
+        }.execute();
+
+    }
+
     private void performSearch(String queryString) {
         beforeRequest();
         UserRequest request = new UserRequest(queryString);
+        UserRequestListener requestListener = new UserRequestListener();
+        requestListener.setQueryString(queryString);
         spiceManager.getFromCacheAndLoadFromNetworkIfExpired(request, request.getCacheKey(),
-                DurationInMillis.ONE_WEEK, new UserRequestListener());
+                DurationInMillis.ALWAYS_RETURNED, requestListener);
     }
 
     protected void returnToPrevious(String userKey) {
@@ -90,10 +118,18 @@ public class UserSelectActivity extends BaseActivity {
 
     public void setupUserList(AuthorList authorList) {
         afterRequest();
+        authorList.cacheAuthors(spiceManager);
         adapter.setAuthors(authorList);
     }
 
     private class UserRequestListener implements RequestListener<AuthorList> {
+
+        private String queryString;
+
+        public void setQueryString(String queryString) {
+            this.queryString = queryString;
+        }
+
         @Override
         public void onRequestFailure(SpiceException e) {
             Toast.makeText(UserSelectActivity.this,
@@ -105,6 +141,10 @@ public class UserSelectActivity extends BaseActivity {
         @Override
         public void onRequestSuccess(AuthorList authors) {
             setupUserList(authors);
+            // Caching search results screws up functionality that loads users
+            // from cache for this screen...
+            spiceManager.removeDataFromCache(AuthorList.class,
+                    new UserRequest(queryString).getCacheKey());
         }
     }
 }

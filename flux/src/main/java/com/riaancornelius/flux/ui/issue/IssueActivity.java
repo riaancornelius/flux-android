@@ -139,7 +139,6 @@ public class IssueActivity extends BaseActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         if (requestCode == USER_SELECT && resultCode != RESULT_CANCELED) {
-            //handle it here
             String userKey = intent.getStringExtra(UserSelectActivity.USER_KEY);
             Log.d(TAG, "Reassigning issue " + issueKey + " to user " + userKey);
             if (issue != null) {
@@ -151,8 +150,6 @@ public class IssueActivity extends BaseActivity {
                 spiceManager.getFromCacheAndLoadFromNetworkIfExpired(request, "update",
                         DurationInMillis.ALWAYS_RETURNED, new IssueUpdateListener());
             }
-        } else {
-            super.onActivityResult(requestCode, resultCode, intent);
         }
     }
 
@@ -192,63 +189,6 @@ public class IssueActivity extends BaseActivity {
             spiceManager.getFromCache(Issue.class,
                     lastRequestCacheKey, DurationInMillis.ONE_WEEK,
                     new IssueRequestListener());
-        }
-    }
-
-    private class IssueRequestListener implements
-            RequestListener<Issue> {
-        @Override
-        public void onRequestFailure(SpiceException e) {
-            Toast.makeText(IssueActivity.this,
-                    "Error during request: " + e.getLocalizedMessage(), Toast.LENGTH_LONG)
-                    .show();
-            IssueActivity.this.setProgressBarIndeterminateVisibility(false);
-        }
-
-        @Override
-        public void onRequestSuccess(Issue issueReturned) {
-            // Issue could be null just if contentManager.getFromCache(...)
-            // doesn't return anything.
-            if (issueReturned == null) {
-                Log.d(TAG, "Issue returned is null");
-                return;
-            }
-
-            issue = issueReturned;
-
-            Log.d(TAG, "Issue data returned for " + issue.getKey());
-
-            keyField.setText(issueReturned.getKey());
-            summaryField.setText(issueReturned.getFields().getSummary());
-
-            if (issueReturned.getFields().getAssignee() != null) {
-                String displayName = issueReturned.getFields().getAssignee().getDisplayName();
-                assignedToField.setText(displayName);
-                BitmapRequest imageRequest = new BitmapRequest(issueReturned.getFields().getAssignee().getAvatarUrls().getFortyEightSquareUrl(), new File(getFilesDir(), displayName+".cache"));
-                imageSpiceManager.getFromCacheAndLoadFromNetworkIfExpired(imageRequest, "image"+displayName, DurationInMillis.ONE_WEEK, new ImageListener());
-            } else {
-                assignedToField.setText(R.string.unassigned);
-                BitmapRequest imageRequest = new BitmapRequest("https://secure.gravatar.com/avatar/17f13d9f230593332dba4190eb839037?d=mm&s=48", new File(getFilesDir(),"unassigned.cache"));
-                imageSpiceManager.getFromCacheAndLoadFromNetworkIfExpired(imageRequest, "imageunassigned", DurationInMillis.ALWAYS_RETURNED, new ImageListener());
-            }
-
-            setDescription(issueReturned.getFields().getDescription());
-
-            if (!(issueReturned.getFields().getCommentList() == null) &&
-                    !issueReturned.getFields().getCommentList().getComments().isEmpty()) {
-                setComments(issueReturned.getFields().getCommentList());
-            } else {
-                setComments(null);
-            }
-
-            if (issueReturned.getFields().getAttachmentList() != null &&
-                    !issueReturned.getFields().getAttachmentList().isEmpty()) {
-                setAttachments(issueReturned.getFields().getAttachmentList());
-            } else {
-                setAttachments(null);
-            }
-
-            IssueActivity.this.afterRequest();
         }
     }
 
@@ -300,6 +240,65 @@ public class IssueActivity extends BaseActivity {
         } else {
             attList.setVisibility(View.GONE);
             noAttachments.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private class IssueRequestListener implements
+            RequestListener<Issue> {
+        @Override
+        public void onRequestFailure(SpiceException e) {
+            Toast.makeText(IssueActivity.this,
+                    "Error during request: " + e.getLocalizedMessage(), Toast.LENGTH_LONG)
+                    .show();
+            IssueActivity.this.setProgressBarIndeterminateVisibility(false);
+        }
+
+        @Override
+        public void onRequestSuccess(Issue issueReturned) {
+            // Issue could be null just if contentManager.getFromCache(...)
+            // doesn't return anything.
+            if (issueReturned == null) {
+                Log.d(TAG, "Issue returned is null");
+                return;
+            }
+
+            issue = issueReturned;
+
+            Log.d(TAG, "Issue data returned for " + issue.getKey());
+
+            keyField.setText(issueReturned.getKey());
+            summaryField.setText(issueReturned.getFields().getSummary());
+
+            Author assignee = issueReturned.getFields().getAssignee();
+            if (assignee != null) {
+                assignee.putInCache(spiceManager);
+                String displayName = assignee.getDisplayName();
+                assignedToField.setText(displayName);
+                BitmapRequest imageRequest = new BitmapRequest(assignee.getAvatarUrls().getFortyEightSquareUrl(), new File(getFilesDir(), displayName+".cache"));
+                imageSpiceManager.getFromCacheAndLoadFromNetworkIfExpired(imageRequest, "image"+displayName, DurationInMillis.ONE_WEEK, new ImageListener());
+            } else {
+                assignedToField.setText(R.string.unassigned);
+                BitmapRequest imageRequest = new BitmapRequest("https://secure.gravatar.com/avatar/17f13d9f230593332dba4190eb839037?d=mm&s=48", new File(getFilesDir(),"unassigned.cache"));
+                imageSpiceManager.getFromCacheAndLoadFromNetworkIfExpired(imageRequest, "imageunassigned", DurationInMillis.ALWAYS_RETURNED, new ImageListener());
+            }
+
+            setDescription(issueReturned.getFields().getDescription());
+
+            if (!(issueReturned.getFields().getCommentList() == null) &&
+                    !issueReturned.getFields().getCommentList().getComments().isEmpty()) {
+                setComments(issueReturned.getFields().getCommentList());
+            } else {
+                setComments(null);
+            }
+
+            if (issueReturned.getFields().getAttachmentList() != null &&
+                    !issueReturned.getFields().getAttachmentList().isEmpty()) {
+                setAttachments(issueReturned.getFields().getAttachmentList());
+            } else {
+                setAttachments(null);
+            }
+
+            IssueActivity.this.afterRequest();
         }
     }
 

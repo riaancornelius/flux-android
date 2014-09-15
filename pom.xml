@@ -53,6 +53,11 @@
                 <artifactId>support-v4</artifactId>
                 <version>${android.support.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>18.0</version>
+            </dependency>
             <!--  Barcode Scanning-->
             <dependency>
                 <groupId>com.google.zxing</groupId>

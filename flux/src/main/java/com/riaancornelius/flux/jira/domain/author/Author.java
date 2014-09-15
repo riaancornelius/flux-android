@@ -1,15 +1,21 @@
 package com.riaancornelius.flux.jira.domain.author;
 
+import android.util.Log;
+
+import com.google.common.base.Predicate;
+import com.octo.android.robospice.SpiceManager;
 import com.riaancornelius.flux.jira.domain.author.AvatarUrls;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 
+import java.util.Comparator;
+
 /**
  * User: riaan.cornelius
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Author {
+public class Author implements Comparable<Author> {
 
     private String key;
 
@@ -25,6 +31,31 @@ public class Author {
     private String restUrl;
 
     private AvatarUrls avatarUrls;
+
+    public static Predicate<Author> notEmptyPredicate() {
+        return new Predicate<Author>() {
+            @Override
+            public boolean apply(Author input) {
+                return hasKeyAndNameFields(input);
+            }
+        };
+    }
+
+    private static boolean hasKeyAndNameFields(Author input) {
+        return input != null &&
+                input.getKey() != null && !input.getKey().isEmpty() &&
+                input.getName() != null && !input.getName().isEmpty() &&
+                input.getDisplayName() != null && !input.getDisplayName().isEmpty();
+    }
+
+    public void putInCache(SpiceManager spiceManager) {
+        if (hasKeyAndNameFields(this)) {
+            Log.d("AUTHOR", "Caching author: " + this);
+            spiceManager.putInCache("author_" + getName(), this);
+        } else {
+            Log.d("AUTHOR", "Not caching author because key or name fields empty: " + this);
+        }
+    }
 
     public String getName() {
         return name;
@@ -92,5 +123,10 @@ public class Author {
                 ", restUrl='" + restUrl + '\'' +
                 ", avatarUrls=" + avatarUrls +
                 '}';
+    }
+
+    @Override
+    public int compareTo(Author another) {
+        return getDisplayName().compareTo(another.getDisplayName());
     }
 }

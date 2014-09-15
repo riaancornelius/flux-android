@@ -1,16 +1,19 @@
 package com.riaancornelius.flux.api;
 
 import android.app.Application;
+import android.os.Environment;
 
 import com.octo.android.robospice.SpringAndroidSpiceService;
 import com.octo.android.robospice.persistence.CacheManager;
 import com.octo.android.robospice.persistence.exception.CacheCreationException;
 import com.octo.android.robospice.persistence.springandroid.json.jackson.JacksonObjectPersisterFactory;
 
+import org.codehaus.jackson.map.DeserializationConfig;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJacksonHttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.File;
 import java.util.List;
 
 /**
