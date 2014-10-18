@@ -66,13 +66,13 @@ public class BurndownChart extends XYPlot {
         setDomainValueFormat(dateFormat);
         //setup y axis
         setRangeLabel("");
-
     }
 
     public void setTimeBounds(Long startTime, Long endTime) {
         Log.d("BURNDOWN", startTime + " - " + endTime);
-
         setDomainBoundaries(new Double(startTime), new Double(endTime), BoundaryMode.AUTO);
+        Log.d("BURNDOWN", "Converted start date " + new Date(startTime) + " to " + new Date(new Double(startTime).longValue()));
+        Log.d("BURNDOWN", "Converted end date " + new Date(endTime) + " to " + new Date(new Double(endTime).longValue()));
         this.startTime = startTime;
         this.endTime = endTime;
     }
@@ -133,14 +133,11 @@ public class BurndownChart extends XYPlot {
 
         @Override
         public StringBuffer format(Object object, StringBuffer buffer, FieldPosition field) {
-            Log.d("BURNDOWN - drawing date ", ((Double) object).toString());
+            Log.d("BURNDOWN - DATE", ((Double) object).toString());
             Double timeStamp = ((Double) object);
-
-            //start date = -1.0 and end date = 1.0, so first normalise
-            timeStamp = (timeStamp + 1.0) / 2.0;
-            long time = (long) ((endTime - startTime) * timeStamp + startTime);
-            Log.d("BURNDOWN - drawing date", "new time: " + timeStamp);
-            Date date = new Date(time);
+            Log.d("BURNDOWN - DATE", "Drawing timestamp "+ timeStamp.longValue());
+            Date date = new Date(timeStamp.longValue());
+            Log.d("BURNDOWN - DATE","Converted time stamp: " + date);
             return dateFormat.format(date, buffer, field);
         }
 
