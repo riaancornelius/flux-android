@@ -168,8 +168,7 @@ public class SprintFragment extends Fragment implements TitledFragment {
 
             burndownChart.setTimeBounds(burndown.getStartTime(), burndown.getEndTime());
 
-            double startValue = 25; //TODO calculate this
-            burndownChart.setTrendLine(startValue, burndown.getWorkRateData().getRates());
+            burndownChart.setTrendLine(burndown.getWorkRateData().getRates());
             burndownChart.setVisibility(View.VISIBLE);
         }
     }

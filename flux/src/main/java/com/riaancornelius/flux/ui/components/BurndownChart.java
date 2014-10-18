@@ -27,7 +27,7 @@ import java.util.List;
  * @author Elsabe
  */
 public class BurndownChart extends XYPlot {
-    private Double trendLineStart;
+    private Double trendLineStartStoryPoints;
     private Long startTime;
     private Long endTime;
 
@@ -78,11 +78,10 @@ public class BurndownChart extends XYPlot {
     }
 
     public void setStartingPoints(Double value) {
-        this.trendLineStart = value;
+        this.trendLineStartStoryPoints = value;
     }
 
-    public void setTrendLine(double startValue, List<Rate> rates) {
-        //TODO
+    public void setTrendLine(List<Rate> rates) {
         Log.d("TRENDLINE", "Trendline data: " + rates);
 
         //make sure rates are ordered
@@ -93,22 +92,24 @@ public class BurndownChart extends XYPlot {
             }
         });
 
-        int counter = 0;
+        int slantedLines = 0;
         for (Rate r : rates) {
             if (r.getRate() > 0) {
-                counter++;
+                slantedLines++;
             }
         }
+        Log.d("BURNDOWN - TRENDLINE", "Starting points: " + trendLineStartStoryPoints);
+        Log.d("BURNDOWN - TRENDLINE", "Number of downs: " + slantedLines);
 
-        double rateChange = startValue / counter;
+        double rateChange = trendLineStartStoryPoints / slantedLines; // "slope" of line
 
         Long[] dates = new Long[rates.size() + 1];
         Double[] values = new Double[rates.size() + 1];
         //first entry is
         dates[0] = rates.get(0).getStart();
-        values[0] = startValue;
+        values[0] = trendLineStartStoryPoints;
 
-        double currentValue = startValue;
+        double currentValue = trendLineStartStoryPoints;
         int currentIndex = 1;
         for (Rate r : rates) {
             dates[currentIndex] = r.getEnd();
