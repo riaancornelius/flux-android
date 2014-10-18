@@ -166,7 +166,7 @@ public class SprintFragment extends Fragment implements TitledFragment {
             Log.d(TAG, "Successfully loaded burndown info: " + burndown);
             burndownLoading.setVisibility(View.GONE);
 
-            burndownChart.setTimeBounds(burndown.getStartTime(), burndown.getCompleteTime());
+            burndownChart.setTimeBounds(burndown.getStartTime(), burndown.getEndTime());
 
             double startValue = 25; //TODO calculate this
             burndownChart.setTrendLine(startValue, burndown.getWorkRateData().getRates());
