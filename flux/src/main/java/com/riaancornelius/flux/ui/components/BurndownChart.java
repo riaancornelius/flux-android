@@ -60,6 +60,9 @@ public class BurndownChart extends XYPlot {
         getGraphWidget().getGridBackgroundPaint().setColor(Color.WHITE);
         getGraphWidget().getGridLinePaint().setColor(getResources().getColor(com.riaancornelius.flux.R.color.light_gray));
 
+        getLayoutManager().remove(getLegendWidget());
+        getLayoutManager().remove(getDomainLabelWidget());
+
         setTitle(getContext().getString(com.riaancornelius.flux.R.string.burndown_chart));
         //setup x axis
         setDomainLabel("");
@@ -101,31 +104,26 @@ public class BurndownChart extends XYPlot {
         Log.d("BURNDOWN - TRENDLINE", "Starting points: " + trendLineStartStoryPoints);
         Log.d("BURNDOWN - TRENDLINE", "Number of downs: " + slantedLines);
 
-        double rateChange = trendLineStartStoryPoints / slantedLines; // "slope" of line
-
-        Long[] dates = new Long[rates.size() + 1];
-        Double[] values = new Double[rates.size() + 1];
-        //first entry is
-        dates[0] = rates.get(0).getStart();
-        values[0] = trendLineStartStoryPoints;
-
-        double currentValue = trendLineStartStoryPoints;
-        int currentIndex = 1;
+        double rateChange = trendLineStartStoryPoints / slantedLines; // "slope" of slanted lines
+        double runningTotal = trendLineStartStoryPoints;
         for (Rate r : rates) {
-            dates[currentIndex] = r.getEnd();
+            Log.d("BURNDOWN - TRENDLINE",
+                    "Time: " + r.getStart() + " - " + r.getEnd() +
+                            ", rate: " + r.getRate() +
+                            ", starting story points: " + runningTotal);
+
+            //Draw this change
+            List<Double> storyPoints;
             if (r.getRate() > 0) {
-                currentValue -= rateChange;
+                storyPoints = Arrays.asList(runningTotal, runningTotal - rateChange);
+                runningTotal -= rateChange;
+            } else {
+                storyPoints = Arrays.asList(runningTotal, runningTotal);
             }
-            values[currentIndex] = currentValue;
-            currentIndex++;
+            XYSeries line = new SimpleXYSeries(Arrays.asList(r.getStart(), r.getEnd()), storyPoints, "");
+            LineAndPointFormatter formatter = new LineAndPointFormatter(Color.LTGRAY, Color.TRANSPARENT, Color.TRANSPARENT);
+            this.addSeries(line, formatter);
         }
-        Log.d("TRENDLINE", "dates: " + dates);
-        Log.d("TRENDLINE", "values: " + values);
-
-        XYSeries trendLine = new SimpleXYSeries(Arrays.asList(dates), Arrays.asList(values), "Trendline");
-        LineAndPointFormatter formatter = new LineAndPointFormatter(Color.RED, Color.RED, Color.RED);
-
-        this.addSeries(trendLine, formatter);
 
     }
 
@@ -136,9 +134,9 @@ public class BurndownChart extends XYPlot {
         public StringBuffer format(Object object, StringBuffer buffer, FieldPosition field) {
             Log.d("BURNDOWN - DATE", ((Double) object).toString());
             Double timeStamp = ((Double) object);
-            Log.d("BURNDOWN - DATE", "Drawing timestamp "+ timeStamp.longValue());
+            Log.d("BURNDOWN - DATE", "Drawing timestamp " + timeStamp.longValue());
             Date date = new Date(timeStamp.longValue());
-            Log.d("BURNDOWN - DATE","Converted time stamp: " + date);
+            Log.d("BURNDOWN - DATE", "Converted time stamp: " + date);
             return dateFormat.format(date, buffer, field);
         }
 
