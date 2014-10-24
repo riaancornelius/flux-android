@@ -18,6 +18,7 @@ import java.text.FieldPosition;
 import java.text.Format;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
@@ -94,7 +95,18 @@ public class BurndownChart extends XYPlot {
         this.startingStoryPoints = value;
     }
 
-    public void setTrendLine(List<Rate> rates) {
+    public void setTrendLine(List<Rate> unfilteredRates) {
+        List<Rate> rates = new ArrayList<Rate>();
+        for (Rate r : unfilteredRates) {
+            if (r.getStart() < endTime && r.getEnd() < endTime) {
+                rates.add(r);
+            } else if (r.getStart() < endTime) {
+                r.setEnd(endTime);
+                rates.add(r);
+            }
+        }
+
+
         Log.d("TRENDLINE", "Trendline data: " + rates);
 
         //make sure rates are ordered
