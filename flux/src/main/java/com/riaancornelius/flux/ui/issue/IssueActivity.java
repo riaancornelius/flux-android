@@ -1,23 +1,17 @@
 package com.riaancornelius.flux.ui.issue;
 
 import android.app.AlertDialog;
+import android.app.DownloadManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
-
+import android.view.*;
+import android.widget.*;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.DurationInMillis;
 import com.octo.android.robospice.persistence.exception.SpiceException;
@@ -262,7 +256,22 @@ public class IssueActivity extends BaseActivity {
             final int adapterCount = adapter.getCount();
             for (int i = 0; i < adapterCount; i++) {
                 View item = adapter.getView(i, null, null);
+                Attachment attachment = (Attachment) adapter.getItem(i);
+                final String restUrl = attachment.getRestUrl();
                 attList.addView(item);
+                item.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        //TODO get filename
+                        String filename;
+                        Uri uri = Uri.parse(restUrl);
+                        DownloadManager.Request request = new DownloadManager.Request(uri);
+                        request.setDestinationInExternalFilesDir(Environment.DIRECTORY_DOWNLOADS, filename);
+                        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+                        DownloadManager dm = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
+                        dm.enqueue(request);
+                    }
+                });
             }
         } else {
             attList.setVisibility(View.GONE);
@@ -333,7 +342,7 @@ public class IssueActivity extends BaseActivity {
 
         @Override
         public void onRequestFailure(SpiceException e) {
-            Log.d(TAG, "Request failed",e);
+            Log.d(TAG, "Request failed", e);
             Toast.makeText(IssueActivity.this, e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
             IssueActivity.this.afterRequest();
         }
