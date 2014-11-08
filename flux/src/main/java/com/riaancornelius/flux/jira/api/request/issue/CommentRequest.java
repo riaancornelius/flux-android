@@ -4,6 +4,7 @@ import com.riaancornelius.flux.jira.api.request.JiraSpringAndroidSpiceRequest;
 import com.riaancornelius.flux.jira.api.service.JiraJacksonSpringAndroidSpiceService;
 import com.riaancornelius.flux.jira.domain.issue.Issue;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.springframework.http.HttpAuthentication;
 import org.springframework.http.HttpMethod;
@@ -35,8 +36,7 @@ public class CommentRequest extends JiraSpringAndroidSpiceRequest<CommentRequest
     }
 
     public static class RequestBody {
-        @JsonProperty(value = "self")
-        private String body;
+       private String body;
 
         public String getBody() {
             return body;
@@ -47,5 +47,6 @@ public class CommentRequest extends JiraSpringAndroidSpiceRequest<CommentRequest
         }
     }
 
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class RequestResponse {}
 }

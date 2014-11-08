@@ -307,7 +307,7 @@ public class IssueActivity extends BaseActivity {
 
         @Override
         public void onRequestSuccess(CommentRequest.RequestResponse requestBody) {
-            Toast.makeText(IssueActivity.this, "Commenting succeeded", Toast.LENGTH_LONG).show();
+            Toast.makeText(IssueActivity.this, "Comment successful", Toast.LENGTH_LONG).show();
             afterRequest();
             clearIssueFromCache(issueKey);
             performRequest(issueKey);
