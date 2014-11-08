@@ -32,6 +32,7 @@ import com.octo.android.robospice.request.simple.BitmapRequest;
 import com.riaancornelius.flux.BaseActivity;
 import com.riaancornelius.flux.R;
 import com.riaancornelius.flux.api.ImageSpiceService;
+import com.riaancornelius.flux.domain.Settings;
 import com.riaancornelius.flux.jira.api.request.issue.CommentRequest;
 import com.riaancornelius.flux.jira.api.request.issue.IssueRequest;
 import com.riaancornelius.flux.jira.api.request.issue.UpdateIssueRequest;
