@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -26,6 +27,7 @@ import com.octo.android.robospice.request.simple.BitmapRequest;
 import com.riaancornelius.flux.BaseActivity;
 import com.riaancornelius.flux.R;
 import com.riaancornelius.flux.api.ImageSpiceService;
+import com.riaancornelius.flux.jira.api.request.issue.CommentRequest;
 import com.riaancornelius.flux.jira.api.request.issue.IssueRequest;
 import com.riaancornelius.flux.jira.api.request.issue.UpdateIssueRequest;
 import com.riaancornelius.flux.jira.domain.author.Author;
@@ -103,8 +105,7 @@ public class IssueActivity extends BaseActivity {
                 toast.show();
                 break;
             case R.id.action_add_comment:
-                toast.setText("Add a comment");
-                toast.show();
+                addComment();
                 break;
             case R.id.action_assign_user:
                 Intent intent = new Intent(IssueActivity.this, UserSelectActivity.class);
@@ -216,6 +217,7 @@ public class IssueActivity extends BaseActivity {
         if (commentList != null) {
             comments.setVisibility(View.VISIBLE);
             noComments.setVisibility(View.GONE);
+            noComments.setVisibility(View.GONE);
             CommentAdapter commentsAdapter = new CommentAdapter(getLayoutInflater(), commentList);
             final int adapterCount = commentsAdapter.getCount();
             for (int i = 0; i < adapterCount; i++) {
@@ -228,7 +230,7 @@ public class IssueActivity extends BaseActivity {
                         new AlertDialog.Builder(IssueActivity.this)
                                 .setMessage(comment.getBody())
                                 .setTitle(comment.getAuthor().getDisplayName() +
-                                        " ("+ DateFormat.getDateInstance().format(comment.getCreated()) +")")
+                                        " (" + DateFormat.getDateInstance().format(comment.getCreated()) + ")")
                                 .setNegativeButton(R.string.close, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
@@ -238,7 +240,7 @@ public class IssueActivity extends BaseActivity {
                                 .setPositiveButton(R.string.action_add_comment, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        Toast.makeText(IssueActivity.this, "Add a comment not implemented yet", Toast.LENGTH_LONG).show();
+                                        addComment();
                                     }
                                 })
                                 .create().show();
@@ -249,6 +251,31 @@ public class IssueActivity extends BaseActivity {
             comments.setVisibility(View.GONE);
             noComments.setVisibility(View.VISIBLE);
         }
+    }
+
+    private void addComment() {
+        AlertDialog.Builder build = new AlertDialog.Builder(this);
+        build.setTitle(getString(R.string.action_add_comment));
+        final EditText input = new EditText(this);
+        build.setView(input);
+
+        build.setPositiveButton(R.string.post, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                String comment = input.getText().toString();
+                CommentRequest commentRequest = new CommentRequest(issue, comment);
+                beforeRequest("Posting comment", "Please wait");
+                spiceManager.execute(commentRequest, new CommentRequestListener());
+            }
+        });
+        build.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                //do nothing
+            }
+        });
+
+        build.show();
     }
 
     private void setAttachments(ArrayList<Attachment> attachments) {
@@ -267,6 +294,23 @@ public class IssueActivity extends BaseActivity {
         } else {
             attList.setVisibility(View.GONE);
             noAttachments.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private class CommentRequestListener implements RequestListener<CommentRequest.RequestResponse> {
+
+        @Override
+        public void onRequestFailure(SpiceException e) {
+            Toast.makeText(IssueActivity.this, "Commenting failed", Toast.LENGTH_LONG).show();
+            afterRequest();
+        }
+
+        @Override
+        public void onRequestSuccess(CommentRequest.RequestResponse requestBody) {
+            Toast.makeText(IssueActivity.this, "Commenting succeeded", Toast.LENGTH_LONG).show();
+            afterRequest();
+            clearIssueFromCache(issueKey);
+            performRequest(issueKey);
         }
     }
 
@@ -333,7 +377,7 @@ public class IssueActivity extends BaseActivity {
 
         @Override
         public void onRequestFailure(SpiceException e) {
-            Log.d(TAG, "Request failed",e);
+            Log.d(TAG, "Request failed", e);
             Toast.makeText(IssueActivity.this, e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
             IssueActivity.this.afterRequest();
         }
