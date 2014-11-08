@@ -258,7 +258,7 @@ public class IssueActivity extends BaseActivity {
         if (attachments != null) {
             attList.setVisibility(View.VISIBLE);
             noAttachments.setVisibility(View.GONE);
-            AttachmentsAdapter adapter = new AttachmentsAdapter(getLayoutInflater(), attachments);
+            AttachmentsAdapter adapter = new AttachmentsAdapter(getLayoutInflater(), attachments, getPackageManager());
             final int adapterCount = adapter.getCount();
             for (int i = 0; i < adapterCount; i++) {
                 View item = adapter.getView(i, null, null);
