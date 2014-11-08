@@ -26,7 +26,7 @@ public class IssueAttachmentsFragment extends Fragment {
         if (attachments != null) {
             attList.setVisibility(View.VISIBLE);
             noAttachments.setVisibility(View.GONE);
-            AttachmentsAdapter adapter = new AttachmentsAdapter(inflater, attachments);
+            AttachmentsAdapter adapter = new AttachmentsAdapter(inflater, attachments, getActivity().getPackageManager());
             attList.setAdapter(adapter);
             adapter.notifyDataSetChanged();
         } else {
