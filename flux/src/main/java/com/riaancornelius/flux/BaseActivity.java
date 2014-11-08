@@ -152,12 +152,16 @@ public class BaseActivity extends RoboFragmentActivity {
     }
 
     protected void beforeRequest() {
+        beforeRequest("Loading data", "Please wait");
+    }
+
+    protected void beforeRequest(String title, String message) {
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         Fragment previous = getFragmentManager().findFragmentByTag(LOADING_BAR);
         if (previous != null) {
             transaction.remove(previous);
         }
-        ProgressDialogFragment fragment = ProgressDialogFragment.newInstance("Loading data", "Please wait");
+        ProgressDialogFragment fragment = ProgressDialogFragment.newInstance(title, message);
         fragment.show(getFragmentManager(), LOADING_BAR);
         getFragmentManager().executePendingTransactions();
     }
