@@ -1,23 +1,19 @@
 package com.riaancornelius.flux.ui.issue;
 
 import android.app.AlertDialog;
+import android.app.DownloadManager;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
-
+import android.view.*;
+import android.widget.*;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.DurationInMillis;
 import com.octo.android.robospice.persistence.exception.SpiceException;
@@ -26,6 +22,7 @@ import com.octo.android.robospice.request.simple.BitmapRequest;
 import com.riaancornelius.flux.BaseActivity;
 import com.riaancornelius.flux.R;
 import com.riaancornelius.flux.api.ImageSpiceService;
+import com.riaancornelius.flux.domain.Settings;
 import com.riaancornelius.flux.jira.api.request.issue.IssueRequest;
 import com.riaancornelius.flux.jira.api.request.issue.UpdateIssueRequest;
 import com.riaancornelius.flux.jira.domain.author.Author;
@@ -33,6 +30,9 @@ import com.riaancornelius.flux.jira.domain.issue.Attachment;
 import com.riaancornelius.flux.jira.domain.issue.Comment;
 import com.riaancornelius.flux.jira.domain.issue.Comments;
 import com.riaancornelius.flux.jira.domain.issue.Issue;
+
+import org.springframework.http.HttpAuthentication;
+import org.springframework.http.HttpBasicAuthentication;
 
 import java.io.File;
 import java.text.DateFormat;
@@ -262,12 +262,46 @@ public class IssueActivity extends BaseActivity {
             final int adapterCount = adapter.getCount();
             for (int i = 0; i < adapterCount; i++) {
                 View item = adapter.getView(i, null, null);
+                Attachment attachment = (Attachment) adapter.getItem(i);
+                final String restUrl = attachment.getContent();
+                final String filename = attachment.getFilename();
                 attList.addView(item);
+                item.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Uri uri = Uri.parse(restUrl);
+                        Log.d("ATTACHMENTS", "Downloading " + uri + " to " + filename);
+                        DownloadManager.Request request = new DownloadManager.Request(uri);
+
+                        HttpAuthentication auth = createAuthenticationHeader();
+                        Log.d("ATTACHMENTS", "Header val: " + auth.getHeaderValue());
+                        request.addRequestHeader("Authorization", auth.getHeaderValue());
+
+                        request.setDestinationInExternalFilesDir(getApplicationContext(), Environment.DIRECTORY_DOWNLOADS, filename);
+                        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+                        DownloadManager dm = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
+                        dm.enqueue(request);
+                    }
+                });
             }
         } else {
             attList.setVisibility(View.GONE);
             noAttachments.setVisibility(View.VISIBLE);
         }
+    }
+
+    protected HttpAuthentication createAuthenticationHeader() {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        String username = settings.getString(Settings.JIRA_USERNAME_KEY, "");
+        Log.d("SETTINGS", "Loaded username: " + username);
+        String password = settings.getString(Settings.JIRA_PASSWORD_KEY, "");
+        Log.d("SETTINGS", "Loaded password: " + password);
+        if (username != null && password != null) {
+            return new HttpBasicAuthentication(
+                    username,
+                    password);
+        }
+        return null;
     }
 
     private class IssueRequestListener implements
@@ -333,7 +367,7 @@ public class IssueActivity extends BaseActivity {
 
         @Override
         public void onRequestFailure(SpiceException e) {
-            Log.d(TAG, "Request failed",e);
+            Log.d(TAG, "Request failed", e);
             Toast.makeText(IssueActivity.this, e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
             IssueActivity.this.afterRequest();
         }

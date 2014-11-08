@@ -1,17 +1,13 @@
 package com.riaancornelius.flux.ui.issue;
 
-import android.database.DataSetObserver;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ListAdapter;
 import android.widget.TextView;
-
 import com.riaancornelius.flux.R;
 import com.riaancornelius.flux.jira.domain.issue.Attachment;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
