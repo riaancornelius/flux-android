@@ -109,10 +109,10 @@ public class IssueActivity extends BaseActivity {
         Toast toast = Toast.makeText(IssueActivity.this, "", Toast.LENGTH_SHORT);
         toast.setGravity(Gravity.FILL_HORIZONTAL, 0, 0);
         switch (item.getItemId()) {
-            case R.id.action_edit_issue:
-                toast.setText("Edit issue");
-                toast.show();
-                break;
+//            case R.id.action_edit_issue:
+//                toast.setText("Edit issue");
+//                toast.show();
+//                break;
             case R.id.action_add_comment:
                 addComment();
                 break;
